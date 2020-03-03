@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ESTATISTICA</title>
+    <link rel="stylesheet" href="personalizacao.css">
+</head>
+
+<body>
+    <div>
+        <h1><u>DESCRITIVA</u></h1>
+    </div>
+
+    <section>
+        <div class="entrada">
+            <u> Entre com os dados para a pesquisa</u> :&nbsp;<input type="number" class="entradaD">
+        </div>
+
+        </br><span><button id="upload" onclick="upload()">UPLOAD</button></span>
+        <div>
+            <u> </br>AMOSTRA</u> &nbsp;<input type="radio" id="amostra" class="mark">
+            <u> POPULAÇÃO</u> &nbsp;<input type="radio" id="populacao" class="mark">
+        </div>
+
+        <div class="nomeVariavel">
+            </br>Nome da Variavel :&nbsp;<input type="text" class="nomeV">
+        </div>
+
+        <text>Selecione o tipo de <strong><u>variavel</u></strong> desejada:</text>
+        <div class="variaveis">
+            </br> Variavel Qualitativa Nominal <input type="radio" id="qualiN" class="mark">
+            </br></br> Variavel Qualitativa Ordinal <input type="radio" id="qualiO" class="mark">
+            </br></br> Variavel Quantitativa Discreta <input type="radio" id="quantiD" class="mark">
+            </br></br> Variavel Quantitativa Contínua <input type="radio" id="quantiC" class="mark">
+        </div>
+
+        <span><button id="calcular" onclick="calcular()">CALCULAR</button></span>
+    </section>
+
+    RESPOSTAS...
+
+</body>
+
+</html>
