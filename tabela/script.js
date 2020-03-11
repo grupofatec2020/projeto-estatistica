@@ -42,12 +42,34 @@ function criarTabela(){
   // Somatório total
   let resultado = total_dados.reduce((acumulador, item) => acumulador + item, 0);
   // console.log(resultado);
-
-  // Cálculo das FR_PORCENTO 
-  array_nomes_valores.forEach(element =>{
+  //calculo FA
+  //cont aux q
+  let k = 0;
+  let l = 0;
+  array_nomes_valores.forEach(element => {
     element.fr_porcento = element.valor * 100 / resultado;
-  });
+    //Caso base, caso seja primeira vez no laco o FA eh o valor do item mesmo
+    if (k == 0){
+      element.fa = parseFloat(element.valor);
+      //caso seja um item depois do primeiro, soma o valor do FA do anterior com o atual
+    } else if (k > 0) {
+                //fa anterior q-1                        //valor do item atual
+      element.fa = parseFloat(array_nomes_valores[k-1].fa) + parseFloat(element.valor);
+    }
+    k++
+    if (l == 0){
+      element.fa_porcento = parseFloat(element.fr_porcento);
+    } else if (l > 0) {
+      element.fa_porcento = parseFloat(array_nomes_valores[l-1].fa_porcento) + parseFloat(element.fr_porcento);
+    }
+    l++
+  })
   console.log(array_nomes_valores);
+  // Cálculo das FR_PORCENTO 
+  //array_nomes_valores.forEach(element =>{
+  //  element.fr_porcento = element.valor * 100 / resultado;
+  //});
+  //console.log(array_nomes_valores);
 
   // O que tem aqui é q esse loop cria uma linha <tr>, com algumas colunas (células) <td>
   // que depois dá pra usar aqui abaixo
@@ -57,8 +79,12 @@ function criarTabela(){
     let corpo = document.querySelector("tbody");
     let campoDados = document.createElement("tr");
     let campo_fr_porcento = document.createElement("td");
+    let campo_fa = document.createElement("td");
+    let campo_fa_porcento = document.createElement("td");
     let campoVariavel = document.createElement("td");
+    let texto_fa = document.createTextNode(e.fa);
     let texto_fr_porcento = document.createTextNode(e.fr_porcento);
+    let texto_fa_porcento = document.createTextNode(e.fa_porcento);
     let textoVariavel = document.createTextNode(e.nome);
     // Está parecendo que não vai ter muita questão de validação dos dados,
     // então vamos confiar que o usuário vai informar o mesmo número de nomes de variáveis e de valores
@@ -71,14 +97,14 @@ function criarTabela(){
     campoDados.appendChild(textoDados);
     campoVariavel.appendChild(textoVariavel);
     campo_fr_porcento.appendChild(texto_fr_porcento);
+    campo_fa.appendChild(texto_fa);
+    campo_fa_porcento.appendChild(texto_fa_porcento);
     linha.appendChild(campoVariavel);
     linha.appendChild(campoDados);
     linha.appendChild(campo_fr_porcento); 
+    linha.appendChild(campo_fa);
+    linha.appendChild(campo_fa_porcento);
     corpo.appendChild(linha);
   });
 
 }
-      //total_dados = total_dados.reduce(function(total, numero){
-      //  return(total + numero);
-      //})
-      //console.log(total);
