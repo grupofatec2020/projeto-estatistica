@@ -6,6 +6,9 @@
     <title>Page Title</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <script src='script.js'></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+
+
 </head>
 <body>
     <!-- nome_variavel é melhor até pra entender depois -->
@@ -14,7 +17,7 @@
     <br>
     <input type="text" id="dados_variavel" name="dados_variavel" placeholder="Digite os dados da variavel, separando com ;">
     <button id="enviar" onclick="criarTabela()">Enviar dados</button>
-    <button id="calcular" onclick="calcular_frequencia()">Calcular Frequencias</button>
+    <button id="calcular" onclick="gerarGrafico()">Graficos</button>
     <table>
         <thead>
             <tr>
@@ -30,5 +33,9 @@
 
         </tbody>
     </table>
+    <body>
+    <canvas id="myChart"></canvas>
+    <script src='script.js'></script>
+    </body>
 </body>
 </html>

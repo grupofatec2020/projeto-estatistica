@@ -1,42 +1,28 @@
-function criarTabela(){
-
+function tratamentoDeDados() {
   //recebendo dados do input
   let variavel = document.getElementById("nome_variavel").value;
   let dadosVar = document.getElementById("dados_variavel").value;
   //dividindo os dados
-  let array_variavel = variavel.split(";");
+  // let array_variavel = variavel;
   let array_dados_variavel = dadosVar.split(";");
+  array_dados_variavel.sort();
   // Array vazia que irá conter {nome: 'nome_digitado', valor: valor_digitado}
-  let array_nomes_valores = [];
-
+  let array_valores = [];
   // contador auxiliar
-  let j = 0;
   // percorrer todos os nomes digitados e adicionar na array "final" que será ordenada alfabeticamente
-  array_variavel.forEach(nome_variavel => {
+  let valor_anterior;
+  array_dados_variavel.forEach(dados_variavel => {
     // como na teoria vão existir a mesma quantidade de dados, podemos usar o contador J como índice na outra array tbm
     // quebrar em linha só pra ficar mais fácil de ler
     //o array valores nao ta pegando os dados, nao eh? que eh aqui embaixo?
     // parece q é esse o problema mesmo
-    array_nomes_valores.push({nome: nome_variavel, 
-                              valor: array_dados_variavel[j]});
-    j = j + 1;
+    
+      array_valores.push({valor: dados_variavel});
   });
-
-  //organizar alfabeticamente
-  array_nomes_valores.sort((a, b) => {
-    if (a.nome > b.nome) {
-      return 1
-    }
-    else {
-      return -1
-    }
-  });
-  // pq até aqui, conseguimos fazer array com nome e valores
 
   let total_dados = [];
-  array_nomes_valores.forEach(t => {
+  array_valores.forEach(t => {
     total_dados.push(parseInt(t.valor));
-    // console.log(total_dados);
   });
 
   // Somatório total
@@ -46,7 +32,9 @@ function criarTabela(){
   //cont aux q
   let k = 0;
   let l = 0;
-  array_nomes_valores.forEach(element => {
+  // o primeiro valor
+  // enquanto percorre, soma quantidade
+  array_valores.forEach(element => {
     element.fr_porcento = element.valor * 100 / resultado;
     //Caso base, caso seja primeira vez no laco o FA eh o valor do item mesmo
     if (k == 0){
@@ -54,27 +42,36 @@ function criarTabela(){
       //caso seja um item depois do primeiro, soma o valor do FA do anterior com o atual
     } else if (k > 0) {
                 //fa anterior q-1                        //valor do item atual
-      element.fa = parseFloat(array_nomes_valores[k-1].fa) + parseFloat(element.valor);
+      element.fa = parseFloat(array_valores[k-1].fa) + parseFloat(element.valor);
     }
     k++
     if (l == 0){
       element.fa_porcento = parseFloat(element.fr_porcento);
     } else if (l > 0) {
-      element.fa_porcento = parseFloat(array_nomes_valores[l-1].fa_porcento) + parseFloat(element.fr_porcento);
+      element.fa_porcento = parseFloat(array_valores[l-1].fa_porcento) + parseFloat(element.fr_porcento);
     }
-    l++
-  })
-  console.log(array_nomes_valores);
+    l++;
+  });
+  
+  return array_valores;
+}
+
+
+function criarTabela() {
+
+  array_valores = tratamentoDeDados();
+
+  console.log(array_valores);
   // Cálculo das FR_PORCENTO 
-  //array_nomes_valores.forEach(element =>{
+  //array_valores.forEach(element =>{
   //  element.fr_porcento = element.valor * 100 / resultado;
   //});
-  //console.log(array_nomes_valores);
+  //console.log(array_valores);
 
   // O que tem aqui é q esse loop cria uma linha <tr>, com algumas colunas (células) <td>
   // que depois dá pra usar aqui abaixo
   let i = 0;
-  array_nomes_valores.forEach(e => {
+  array_valores.forEach(e => {
     let linha = document.createElement("tr");
     let corpo = document.querySelector("tbody");
     let campoDados = document.createElement("tr");
@@ -85,7 +82,7 @@ function criarTabela(){
     let texto_fa = document.createTextNode(e.fa);
     let texto_fr_porcento = document.createTextNode(e.fr_porcento);
     let texto_fa_porcento = document.createTextNode(e.fa_porcento);
-    let textoVariavel = document.createTextNode(e.nome);
+    let textoVariavel = document.createTextNode(e.valor);
     // Está parecendo que não vai ter muita questão de validação dos dados,
     // então vamos confiar que o usuário vai informar o mesmo número de nomes de variáveis e de valores
     // partindo dessa premissa básica, vai ter o mesma quantidade de nomes e valores, então na teoria
@@ -107,4 +104,66 @@ function criarTabela(){
     corpo.appendChild(linha);
   });
 
+}
+
+function gerarGrafico() {
+    array_valores = tratamentoDeDados();
+    array_label = [];
+    array_data = [];
+
+    /// talvez gerar as cores aqui tbm
+    array_valores.forEach((e) => {
+        array_label.push(e.nome);
+        array_data.push(e.fr_porcento);
+    });
+
+  //ta vendo que o grafico aqui ta meio cinza?
+  //  onde?, ahhhhhhhhhhh... mas só ta falando q não tá declarando variável não está usando
+  //its declared but never read
+  //eu tinha consegui gerar o grafico, mas ao inves de aparecer o nome da variavel
+  let ctx = document.getElementById('myChart');
+  let grafico = new Chart(ctx, {
+      // The type of chart we want to create
+    type: 'pie',
+    // The data for our dataset
+      data: {
+          // labels: textoVariavel,
+          labels: array_label,
+          datasets: [{
+              label: 'Grafico',
+              backgroundColor: [
+                'rgb(255, 99, 132)',
+                'rgb(55, 299, 132)',
+                'rgb(25, 199, 532)',
+            ],
+              borderColor: 'rgba(0, 0, 0, 0.1)',
+              data: array_data
+              // data: texto_fr_porcento,
+            }]
+        },
+  });
+
+  //   // console.log('texto ${textoVariavel}`);
+  //   console.log(texto_fr_porcento);
+  // let ctx = document.getElementById('myChart');
+  // //ta vendo que o grafico aqui ta meio cinza? 
+  // //  onde?, ahhhhhhhhhhh... mas só ta falando q não tá declarando variável não está usando
+  // //its declared but never read
+  // //eu tinha consegui gerar o grafico, mas ao inves de aparecer o nome da variavel
+  // let grafico = new Chart(ctx, {
+  //     // The type of chart we want to create
+  //   type: 'doughnut',
+  //   // The data for our dataset
+  //     data: {
+  //         // labels: textoVariavel,
+  //         labels: campoVariavel.value,
+  //         datasets: [{
+  //             label: 'My First dataset',
+  //             backgroundColor: 'rgb(255, 99, 132)',
+  //             borderColor: 'rgb(255, 99, 132)',
+  //             data: campo_fr_porcento.value
+  //             // data: texto_fr_porcento,
+  //           }]
+  //       },
+  // });
 }
