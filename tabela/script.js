@@ -18,10 +18,6 @@ function tratamentoDeDados() {
   // percorrer todos os nomes digitados e adicionar na array "final" que será ordenada alfabeticamente
   let valor_anterior;
   array_dados_variavel.forEach(dados_variavel => {
-    // como na teoria vão existir a mesma quantidade de dados, podemos usar o contador J como índice na outra array tbm
-    // quebrar em linha só pra ficar mais fácil de ler
-    //o array valores nao ta pegando os dados, nao eh? que eh aqui embaixo?
-    // parece q é esse o problema mesmo
     
       if (dados_variavel != valor_anterior) {
         array_valores.push({
@@ -40,7 +36,7 @@ function tratamentoDeDados() {
 
   // Somatório total
   let resultado = total_dados.reduce((acumulador, item) => acumulador + item, 0);
-  // console.log(resultado);
+
   //calculo FA
   //cont aux q
   let k = 0;
@@ -78,30 +74,31 @@ function media(valores) {
 
   return media;
 }
+
+//calculando moda
 function moda() {
   let dadosVar = document.getElementById("dados_variavel").value;
   let array_dados_variavel = dadosVar.split(";").map(Number);
   array_dados_variavel.sort((a, b) => a - b);
   let entrada = array_dados_variavel;
-  
-var maior = null;
-var ocorrenciasMaior = -1;
-
-var contagem = 1;
-for ( var i = 1 ; i <= entrada.length ; i++ ) {
-  if ( i < entrada.length && entrada[i] == entrada[i-contagem] )
-    contagem++;
-  
-  else if ( contagem > ocorrenciasMaior ) {
-    maior = entrada[i-1];
-    ocorrenciasMaior = contagem;
-  }
-  //console.log(maior);
+  let maior = null;
+  let ocorrenciasMaior = -1;
+  let contagem = 1;
+  for ( let i = 1 ; i <= entrada.length ; i++ ) {
+    if ( i < entrada.length && entrada[i] == entrada[i-contagem] )
+      contagem++;
+    
+    else if ( contagem > ocorrenciasMaior ) {
+      maior = entrada[i-1];
+      ocorrenciasMaior = contagem;
+    }
  
-}
-return maior;
+  }
+
+  return maior;
 }
 
+//criando tabela discreta
 function criarTabelaDiscreta() {
   let corpo = document.querySelector("tbody");
   //limpar tela
@@ -115,7 +112,10 @@ function criarTabelaDiscreta() {
   nome_tabela.innerHTML = ("Quantitativa Discreta");
   
   //motrar media
-  texto_media.innerHTML = `Media: ${media_discreta.toFixed(1)} <br>`;
+  texto_media.innerHTML = `Media: ${media_discreta.toFixed(2)} <br>`;
+  //mostrar moda
+  let texto_moda = document.getElementById("texto_moda");
+  texto_moda.innerHTML = `Moda: ${valor_moda.toFixed(2)} <b>`;
   // O que tem aqui é q esse loop cria uma linha <tr>, com algumas colunas (células) <td>
   // que depois dá pra usar aqui abaixo
   array_valores.forEach(e => {
@@ -129,15 +129,7 @@ function criarTabelaDiscreta() {
     let texto_fr_porcento = document.createTextNode(e.fr_porcento);
     let texto_fa_porcento = document.createTextNode(e.fa_porcento);
     let textoVariavel = document.createTextNode(e.valor);
-    // Está parecendo que não vai ter muita questão de validação dos dados,
-    // então vamos confiar que o usuário vai informar o mesmo número de nomes de variáveis e de valores
-    // partindo dessa premissa básica, vai ter o mesma quantidade de nomes e valores, então na teoria
-    // o nome na posição zero do array_variavel vai ser referente ao valor na posição zero do array_dados_variavel
-    // certo até aqui? ???? sim
-    // Vamos precisar de uma variável de apoio (variável contadora, por convenção, geralmente é i), declarando fora do laço forEach
     let texto_fi = document.createTextNode(e.fi);
-    
-  
     campoDados.appendChild(texto_fi);
     campoVariavel.appendChild(textoVariavel);
     campo_fr_porcento.appendChild(texto_fr_porcento);
@@ -151,9 +143,6 @@ function criarTabelaDiscreta() {
     corpo.appendChild(linha);
   });
 
-  // mostrar a media na tela depois da tabela criada
-  // let media = document.ggetElementById("media_discreta");
-  // media.text = media;
 }
 
 function criarTabelaOrdNom() {
@@ -166,7 +155,9 @@ function criarTabelaOrdNom() {
   // nome tabela
   let nome_tabela = document.getElementById("nome_tabela"); 
   nome_tabela.innerHTML = ("Qualitativa Ordinal/Nominal");
-
+  //mostrar moda na tela
+  let texto_moda = document.getElementById("texto_moda");
+  texto_moda.innerHTML = `Moda: ${valor_moda.toFixed(2)} <b>`;
   // O que tem aqui é q esse loop cria uma linha <tr>, com algumas colunas (células) <td>
   // que depois dá pra usar aqui abaixo
   array_valores.forEach(e => {
@@ -180,15 +171,7 @@ function criarTabelaOrdNom() {
     let texto_fr_porcento = document.createTextNode(e.fr_porcento);
     let texto_fa_porcento = document.createTextNode(e.fa_porcento);
     let textoVariavel = document.createTextNode(e.valor);
-    // Está parecendo que não vai ter muita questão de validação dos dados,
-    // então vamos confiar que o usuário vai informar o mesmo número de nomes de variáveis e de valores
-    // partindo dessa premissa básica, vai ter o mesma quantidade de nomes e valores, então na teoria
-    // o nome na posição zero do array_variavel vai ser referente ao valor na posição zero do array_dados_variavel
-    // certo até aqui? ???? sim
-    // Vamos precisar de uma variável de apoio (variável contadora, por convenção, geralmente é i), declarando fora do laço forEach
-    let texto_fi = document.createTextNode(e.fi);
-    
-    
+    let texto_fi = document.createTextNode(e.fi);    
     campoDados.appendChild(texto_fi);
     campoVariavel.appendChild(textoVariavel);
     campo_fr_porcento.appendChild(texto_fr_porcento);
@@ -202,9 +185,6 @@ function criarTabelaOrdNom() {
     corpo.appendChild(linha);
   });
 
-  // mostrar a media na tela depois da tabela criada
-  // let media = document.ggetElementById("media_discreta");
-  // media.text = media;
 }
 
 function gerarGraficoDiscreta() {
@@ -220,9 +200,9 @@ function gerarGraficoDiscreta() {
 
   let ctx = document.getElementById('myChart');
   let grafico = new Chart(ctx, {
-    // The type of chart we want to create
+    // tipo grafico
     type: 'bar',
-    // The data for our dataset
+    // data para o grafico
       data: {
           // labels: textoVariavel,
           labels: array_label,
@@ -253,9 +233,9 @@ function gerarGraficoDiscreta() {
 
   let ctx = document.getElementById('myChart');
   let grafico = new Chart(ctx, {
-    // The type of chart we want to create
+    // tipo de grafico
     type: 'pie',
-    // The data for our dataset
+    // data para o grafico
       data: {
           // labels: textoVariavel,
           labels: array_label,
