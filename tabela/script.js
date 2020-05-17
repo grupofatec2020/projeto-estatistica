@@ -1,11 +1,18 @@
 function tratamentoDeDados() {
   //recebendo dados do input
-  let variavel = document.getElementById("nome_variavel").value;
   let dadosVar = document.getElementById("dados_variavel").value;
   //dividindo os dados
   // let array_variavel = variavel;
-  let array_dados_variavel = dadosVar.split(";");
-  array_dados_variavel.sort();
+  let array_dados_variavel = dadosVar.split(";").map(Number);
+  //alfabeticamente
+  array_dados_variavel.sort((a, b) => a - b);
+
+  //calcular quantidade de cada item
+  const quantidade_dados = array_dados_variavel.reduce((acumulador, atual) => {
+    acumulador[atual] = acumulador[atual] ? acumulador[atual] + 1 : 1;
+    return acumulador;
+  }, {});
+
   // Array vazia que irá conter {nome: 'nome_digitado', valor: valor_digitado}
   let array_valores = [];
   // contador auxiliar
@@ -17,13 +24,20 @@ function tratamentoDeDados() {
     //o array valores nao ta pegando os dados, nao eh? que eh aqui embaixo?
     // parece q é esse o problema mesmo
     
-      array_valores.push({valor: dados_variavel});
+      if (dados_variavel != valor_anterior) {
+        array_valores.push({
+          valor: dados_variavel,
+          qtde: quantidade_dados[dados_variavel],
+        });
+      }
+      valor_anterior = dados_variavel;
   });
 
   let total_dados = [];
-  array_valores.forEach(t => {
-    total_dados.push(parseInt(t.valor));
+  array_valores.forEach((t) => {
+    total_dados.push(parseFloat(t.qtde));
   });
+
 
   // Somatório total
   let resultado = total_dados.reduce((acumulador, item) => acumulador + item, 0);
@@ -35,14 +49,15 @@ function tratamentoDeDados() {
   // o primeiro valor
   // enquanto percorre, soma quantidade
   array_valores.forEach(element => {
-    element.fr_porcento = element.valor * 100 / resultado;
+    element.fi = element.qtde;
+    element.fr_porcento = element.qtde * 100 / resultado;
     //Caso base, caso seja primeira vez no laco o FA eh o valor do item mesmo
     if (k == 0){
-      element.fa = parseFloat(element.valor);
+      element.fa = parseFloat(element.qtde);
       //caso seja um item depois do primeiro, soma o valor do FA do anterior com o atual
     } else if (k > 0) {
                 //fa anterior q-1                        //valor do item atual
-      element.fa = parseFloat(array_valores[k-1].fa) + parseFloat(element.valor);
+      element.fa = parseFloat(array_valores[k-1].fa) + parseFloat(element.qtde);
     }
     k++
     if (l == 0){
@@ -58,10 +73,10 @@ function tratamentoDeDados() {
 
 
 function criarTabela() {
-
+  let corpo = document.querySelector("tbody");
+  //limpar tela
+  corpo.innerHTML = "";
   array_valores = tratamentoDeDados();
-
-  console.log(array_valores);
   // Cálculo das FR_PORCENTO 
   //array_valores.forEach(element =>{
   //  element.fr_porcento = element.valor * 100 / resultado;
@@ -70,10 +85,8 @@ function criarTabela() {
 
   // O que tem aqui é q esse loop cria uma linha <tr>, com algumas colunas (células) <td>
   // que depois dá pra usar aqui abaixo
-  let i = 0;
   array_valores.forEach(e => {
     let linha = document.createElement("tr");
-    let corpo = document.querySelector("tbody");
     let campoDados = document.createElement("tr");
     let campo_fr_porcento = document.createElement("td");
     let campo_fa = document.createElement("td");
@@ -89,9 +102,9 @@ function criarTabela() {
     // o nome na posição zero do array_variavel vai ser referente ao valor na posição zero do array_dados_variavel
     // certo até aqui? ???? sim
     // Vamos precisar de uma variável de apoio (variável contadora, por convenção, geralmente é i), declarando fora do laço forEach
-    let textoDados = document.createTextNode(e.valor);
+    let texto_fi = document.createTextNode(e.fi);
 
-    campoDados.appendChild(textoDados);
+    campoDados.appendChild(texto_fi);
     campoVariavel.appendChild(textoVariavel);
     campo_fr_porcento.appendChild(texto_fr_porcento);
     campo_fa.appendChild(texto_fa);
