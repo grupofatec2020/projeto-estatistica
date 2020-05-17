@@ -16,9 +16,17 @@
     <input type="text" id="nome_variavel" name="nome_variavel" placeholder="Digite a variavel, separando com ;"> 
     <br>
     <input type="text" id="dados_variavel" name="dados_variavel" placeholder="Digite os dados da variavel, separando com ;">
-    <button id="enviar" onclick="criarTabela()">Enviar dados</button>
-    <button id="calcular" onclick="gerarGrafico()">Graficos</button>
-    <table>
+    <button id="tab_discreta" onclick="criarTabelaDiscreta()">Quantitativa Discreta</button>
+    <button id="tab_ord_nom" onclick="criarTabelaOrdNom()">Qualitativa Ordinal/Nominal</button>
+    <button id="calcular" onclick="gerarGraficoDiscreta()">Graficos Quantitativa Discreta</button>
+    <button id="calcular" onclick="gerarGraficoQualitativa()">Graficos Qualitativa Nominal/Ordinal</button>
+    <div>
+        <br>
+        <label id="nome_tabela"></label>
+    </div>
+    <br>
+
+    <table border ="2">
         <thead>
             <tr>
                 <th>Variavel</th>
@@ -34,8 +42,15 @@
         </tbody>
     </table>
     <body>
-    <canvas id="myChart"></canvas>
-    <script src='script.js'></script>
+        <br>
+        <div id="texto_media">
+
+        </div>
+
+    </body>
+    <body>
+        <canvas id="myChart" width="1200" height="300"></canvas>
+        <script src='script.js'></script>
     </body>
 </body>
 </html>
