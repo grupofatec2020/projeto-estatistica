@@ -112,24 +112,30 @@ function mediana(){
   let array_dados_variavel = dadosVar.split(";").map(Number);
   array_dados_variavel.sort((a, b) => a - b);
   let md = array_dados_variavel;
-  let mediana = "";
+  let valor_mediana = "";
   var posicao = md.length / 2;
-  let total = md.length;
+  let qtde = md.length;
+  let pos_elemento = "";
   //console.log(posicao);
-if (total % 2 == 0) {
+if (qtde % 2 == 0) {
     if (md[posicao - 1] == md[posicao]) {
         //Se for igual ele já declara que aquela é a mediana
-        mediana = md[posicao];
-        return("Mediana: " + mediana)
+        valor_mediana = md[posicao];
+        return(valor_mediana)
     } else {
         //Se não for aqui ele mostra o calculo da mediana
-        mediana = (md[posicao] + md[posicao - 1]) / 2;
-        return("Mediana: " + mediana)
+        valor_mediana = (md[posicao] + md[posicao - 1]) / 2;
+        return(valor_mediana)
     }
 } else {
-    //Se a posição for impar , ele da o numero da posição direto arredondando a posição com a função pronta math.round
-    mediana = Math.ceil(posicao);
-    return("Mediana: " + mediana)
+    //Se a posição for impar , ele da o numero da posição direto arredondando a posição com a função pronta math.round, mostrando a posicao do elemento
+    pos_elemento = Math.ceil(posicao) - 1;
+    //em qual posicao do array o elemente se encontra
+    //pos_elemento = valor_mediana - 1;
+    //pegar a posicao do elemento e mostrar o valor do elemento
+    //console.log(md[pos_elemento])
+    //console.log(pos_elemento);
+    return(md[pos_elemento]);
  }
 }
 //criando tabela discreta
@@ -186,6 +192,7 @@ function criarTabelaOrdNom() {
   //limpar tela
   corpo.innerHTML = "";
   array_valores = tratamentoDeDados();
+  valor_moda = moda();
   //mostrar media na tela
   texto_media.innerHTML = "Media: Nao tem <br>";
   // nome tabela
