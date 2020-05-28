@@ -1,3 +1,13 @@
+function getRandomColor() {
+  var letters = "0123456789ABCDEF".split("");
+  var color = "#";
+  for (var i = 0; i < 6; i++ ) {
+  color += letters[Math.floor(Math.random() * 16)];
+  }
+//  console.log(color);
+  return color;
+
+}
 function tratamentoDeDados() {
   //recebendo dados do input
   let dadosVar = document.getElementById("dados_variavel").value;
@@ -97,7 +107,31 @@ function moda() {
 
   return maior;
 }
-
+function mediana(){
+  let dadosVar = document.getElementById("dados_variavel").value;
+  let array_dados_variavel = dadosVar.split(";").map(Number);
+  array_dados_variavel.sort((a, b) => a - b);
+  let md = array_dados_variavel;
+  let mediana = "";
+  var posicao = md.length / 2;
+  let total = md.length;
+  //console.log(posicao);
+if (total % 2 == 0) {
+    if (md[posicao - 1] == md[posicao]) {
+        //Se for igual ele já declara que aquela é a mediana
+        mediana = md[posicao];
+        return("Mediana: " + mediana)
+    } else {
+        //Se não for aqui ele mostra o calculo da mediana
+        mediana = (md[posicao] + md[posicao - 1]) / 2;
+        return("Mediana: " + mediana)
+    }
+} else {
+    //Se a posição for impar , ele da o numero da posição direto arredondando a posição com a função pronta math.round
+    mediana = Math.ceil(posicao);
+    return("Mediana: " + mediana)
+ }
+}
 //criando tabela discreta
 function criarTabelaDiscreta() {
   let corpo = document.querySelector("tbody");
@@ -106,11 +140,13 @@ function criarTabelaDiscreta() {
   array_valores = tratamentoDeDados();
   media_discreta = media(array_valores);
   valor_moda = moda();
+  valor_mediana = mediana();
   //mostrar nome tabela
   let nome_tabela = document.getElementById("nome_tabela"); 
 
   nome_tabela.innerHTML = ("Quantitativa Discreta");
-  
+  //motrar mediana
+  texto_mediana.innerHTML = `Mediana: ${valor_mediana} <br>`;
   //motrar media
   texto_media.innerHTML = `Media: ${media_discreta.toFixed(2)} <br>`;
   //mostrar moda
@@ -126,8 +162,8 @@ function criarTabelaDiscreta() {
     let campo_fa_porcento = document.createElement("td");
     let campoVariavel = document.createElement("td");
     let texto_fa = document.createTextNode(e.fa);
-    let texto_fr_porcento = document.createTextNode(e.fr_porcento);
-    let texto_fa_porcento = document.createTextNode(e.fa_porcento);
+    let texto_fr_porcento = document.createTextNode(Math.floor(e.fr_porcento));
+    let texto_fa_porcento = document.createTextNode(Math.floor(e.fa_porcento));
     let textoVariavel = document.createTextNode(e.valor);
     let texto_fi = document.createTextNode(e.fi);
     campoDados.appendChild(texto_fi);
@@ -168,8 +204,8 @@ function criarTabelaOrdNom() {
     let campo_fa_porcento = document.createElement("td");
     let campoVariavel = document.createElement("td");
     let texto_fa = document.createTextNode(e.fa);
-    let texto_fr_porcento = document.createTextNode(e.fr_porcento);
-    let texto_fa_porcento = document.createTextNode(e.fa_porcento);
+    let texto_fr_porcento = document.createTextNode(Math.floor(e.fr_porcento));
+    let texto_fa_porcento = document.createTextNode(Math.floor(e.fa_porcento));
     let textoVariavel = document.createTextNode(e.valor);
     let texto_fi = document.createTextNode(e.fi);    
     campoDados.appendChild(texto_fi);
@@ -187,17 +223,52 @@ function criarTabelaOrdNom() {
 
 }
 
+// function continua() {
+// let min = Math.min(...array_valores)
+//         let max = Math.max(...array_valores)
+//         let at = max - min
+
+//         // CLASSES/LINHAS
+//         let cl = Math.floor(Math.sqrt(total))
+//         let vetClass = [cl - 1, cl, cl + 1]
+
+//         // INTERVALO DE CLASSES
+//         for (let i = at + 1; i != 0; i++) {
+//             if (i % vetClass[0] == 0) {
+//                 at = i;
+//                 cl = vetClass[0];
+//                 break;
+//             } else if (i % vetClass[1] == 0) {
+//                 at = i;
+//                 cl = vetClass[1];
+//                 break;
+//             } else if (i % vetClass[2] == 0) {
+//                 at = i;
+//                 cl = vetClass[2];
+//                 break;
+//             }
+//         }
+//         let ic = (at / cl);
+//       }
+//     console.log(at);
+
 function gerarGraficoDiscreta() {
     array_valores = tratamentoDeDados();
     array_label = [];
     array_data = [];
+    colors = [];
 
     /// talvez gerar as cores aqui tbm
     array_valores.forEach((e) => {
         array_label.push(e.nome);
         array_data.push(e.fr_porcento);
+        colors.push(getRandomColor());
+        
     });
-
+  let dadosVar = document.getElementById("dados_variavel").value;
+  let nome = document.getElementById("nome_variavel").value;
+  let array_dados_variavel = dadosVar.split(";").map(Number);
+  array_dados_variavel.sort((a, b) => a - b);
   let ctx = document.getElementById('myChart');
   let grafico = new Chart(ctx, {
     // tipo grafico
@@ -205,14 +276,10 @@ function gerarGraficoDiscreta() {
     // data para o grafico
       data: {
           // labels: textoVariavel,
-          labels: array_label,
+          labels: array_dados_variavel,
           datasets: [{
-              label: 'Grafico',
-              backgroundColor: [
-                'rgb(255, 99, 132)',
-                'rgb(55, 299, 132)',
-                'rgb(25, 199, 532)',
-            ],
+              label: nome,
+              backgroundColor: colors,
               borderColor: 'rgba(0, 0, 0, 0.1)',
               data: array_data
               // data: texto_fr_porcento,
@@ -224,13 +291,21 @@ function gerarGraficoDiscreta() {
     array_valores = tratamentoDeDados();
     array_label = [];
     array_data = [];
+    colors = [];
+
 
     /// talvez gerar as cores aqui tbm
     array_valores.forEach((e) => {
         array_label.push(e.nome);
         array_data.push(e.fr_porcento);
+        colors.push(getRandomColor());
+
     });
 
+  let dadosVar = document.getElementById("dados_variavel").value;
+  let nome = document.getElementById("nome_variavel").value;
+  let array_dados_variavel = dadosVar.split(";").map(Number);
+  array_dados_variavel.sort((a, b) => a - b);
   let ctx = document.getElementById('myChart');
   let grafico = new Chart(ctx, {
     // tipo de grafico
@@ -238,14 +313,10 @@ function gerarGraficoDiscreta() {
     // data para o grafico
       data: {
           // labels: textoVariavel,
-          labels: array_label,
+          labels: array_dados_variavel,
           datasets: [{
-              label: 'Grafico',
-              backgroundColor: [
-                'rgb(255, 99, 132)',
-                'rgb(55, 299, 132)',
-                'rgb(25, 199, 532)',
-            ],
+              label: nome,
+              backgroundColor: colors,
               borderColor: 'rgba(0, 0, 0, 0.1)',
               data: array_data
               // data: texto_fr_porcento,
