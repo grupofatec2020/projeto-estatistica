@@ -20,13 +20,15 @@
     <button id="tab_ord_nom" onclick="criarTabelaOrdNom()">Qualitativa Ordinal/Nominal</button>
     <button id="calcular" onclick="gerarGraficoDiscreta()">Graficos Quantitativa Discreta</button>
     <button id="calcular" onclick="gerarGraficoQualitativa()">Graficos Qualitativa Nominal/Ordinal</button>
+    <button id="tab_continua" onclick="criarTabelaContinua()">Criar Tabela Continua</button>
+
     <div>
         <br>
         <label id="nome_tabela"></label>
     </div>
     <br>
 
-    <table border ="2">
+    <table border ="2" id="discreta_nominal_ordinal">
         <thead>
             <tr>
                 <th>Variavel</th>
@@ -38,6 +40,23 @@
         </thead>
         <!-- <tbody id="tabelabody"> -->
         <tbody>
+
+        </tbody>
+    </table>
+    
+    <table border ="2">
+        <thead>
+            <tr>
+                <th>Variavel</th>
+                <th>FI</th>
+                <th>FR%</th>
+                <th>FAC</th>
+                <th>FAC%</th>
+                <th>XI</th>
+            </tr>
+        </thead>
+        <!-- <tbody id="tabelabody"> -->
+        <tbody id="tbody_continua">
 
         </tbody>
     </table>
