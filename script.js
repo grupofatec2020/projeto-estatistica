@@ -141,17 +141,63 @@ function mediana() {
     return md[pos_elemento];
   }
 }
-function desvioPop() {}
+function desvioPadraoAmostra(valores, media) {
+  // somatorio fi
+  let somatorio_fi = valores.reduce(
+    (acumulador, item) => acumulador + item.qtde,
+    0
+  );
+
+  let somatorio_valores = valores.reduce(
+    (acumulador, item) => acumulador + (Math.pow((item.valor - media), 2) * item.qtde),
+    0
+  );
+  
+  let desvio_padrao = Math.sqrt(somatorio_valores / (somatorio_fi - 1)).toFixed(2);
+
+  return desvio_padrao;
+}
+
+function desvioPadraoPopulacao(valores, media) {
+  // somatorio fi
+  let somatorio_fi = valores.reduce(
+    (acumulador, item) => acumulador + item.qtde,
+    0
+  );
+
+  let somatorio_valores = valores.reduce(
+    (acumulador, item) => acumulador + (Math.pow((item.valor - media), 2) * item.qtde),
+    0
+  );
+  
+  let desvio_padrao = Math.sqrt(somatorio_valores / somatorio_fi).toFixed(2);
+
+  return desvio_padrao;
+}
+
+function coeficienteVariacaoDiscreta(desvio_padrao, media) {
+  let cv = Math.round((desvio_padrao  / media) * 100);
+
+  return cv;
+}
 
 //criando tabela discreta
 function criarTabelaDiscreta() {
+  const tipo_desvio = document.getElementById("tipo_desvio").value;
   let corpo = document.querySelector("tbody");
   //limpar tela
   corpo.innerHTML = "";
-  array_valores = tratamentoDeDados();
-  media_discreta = media(array_valores);
-  valor_moda = moda();
-  valor_mediana = mediana();
+  let array_valores = tratamentoDeDados();
+  let media_discreta = media(array_valores);
+  let valor_moda = moda();
+  let valor_mediana = mediana();
+  let desvio_padrao;
+  if (tipo_desvio == 'populacao') { 
+    desvio_padrao = desvioPadraoPopulacao(array_valores, media_discreta);
+  } else if (tipo_desvio == 'amostra') { 
+    desvio_padrao = desvioPadraoAmostra(array_valores, media_discreta);
+  }
+  coeficiente_variacao = coeficienteVariacaoDiscreta(desvio_padrao, media_discreta);
   //mostrar nome tabela
   let nome_tabela = document.getElementById("nome_tabela");
 
@@ -163,6 +209,12 @@ function criarTabelaDiscreta() {
   //mostrar moda
   let texto_moda = document.getElementById("texto_moda");
   texto_moda.innerHTML = `Moda: ${valor_moda.toFixed(2)} <b>`;
+    //motrar desvio padrao
+  let texto_desvio_padrao = document.getElementById("texto_desvio_padrao");
+  texto_desvio_padrao.innerHTML = `Desvio Padrão ${desvio_padrao} <b>`;
+  //mostrar coeficiente de varancia
+  let texto_coeficiente = document.getElementById("texto_coeficiente_variacao");
+  texto_coeficiente.innerHTML = `Coeficiente de Variacao ${coeficiente_variacao.toFixed(2)} <b>`;
   // O que tem aqui é q esse loop cria uma linha <tr>, com algumas colunas (células) <td>
   // que depois dá pra usar aqui abaixo
   // let soma_total = array_valores.reduce((soma_total, array_valores) => soma_total + array_valores, 0);
@@ -331,7 +383,7 @@ function tratamentoDeDadosContinua() {
     at++;
     // for (let i = 0; i < 3; i++) {
     for (let j = 0; j < 3; j++) {
-      if (at % classe[j] == 0) {
+      if ((at % classe[j] == 0) && (at / classe[j] > 1)) {
         aux = false;
         qtde_linha = classe[j];
         intervalo_classes = at / classe[j];
@@ -343,7 +395,7 @@ function tratamentoDeDadosContinua() {
 
   let array_final_continua = [];
   // montar tabela com as linhas separando intervalos de classe
-  let valor_anterior = array_dados_variavel[0];
+  let valor_anterior = (array_dados_variavel[0]  - 1);
   // precisamos navegar a qtde de classes separando pelo valor do intervalo
   for (let i = 0; i < qtde_linha; i++) {
     let limite_classe = valor_anterior + intervalo_classes;
@@ -417,6 +469,17 @@ function criarTabelaContinua() {
   let media_continua = mediaContinua(array_valores);
   let valor_moda = moda();
   let valor_mediana = mediana();
+  let desvio_padrao = desvioPadraoPopulacaoContinua(array_valores, media_continua);
+  let coeficiente_variacao_continua = coeficienteVariacaoDiscreta(desvio_padrao, media_continua);
+  console.log(media_continua);
+  console.log(desvio_padrao);
+  console.log(coeficiente_variacao_continua);
+  //motrar desvio padrao
+  let texto_desvio_padrao = document.getElementById("texto_desvio_padrao");
+  texto_desvio_padrao.innerHTML = `Desvio Padrão ${desvio_padrao} <b>`;
+  //mostrar coeficiente de varancia
+  let texto_coeficiente = document.getElementById("texto_coeficiente_variacao");
+  texto_coeficiente.innerHTML = `Coeficiente de Variacao ${coeficiente_variacao_continua.toFixed(2)} <b>`;
   //mostrar nome tabela
   let nome_tabela = document.getElementById("nome_tabela");
 
@@ -467,8 +530,9 @@ function mediaContinua(valores) {
     (acumulador, item) => acumulador + item.qtde,
     0
   );
+
   let total_valores = valores.reduce(
-    (acumulador, item) => acumulador + item.xi,
+    (acumulador, item) => acumulador + (item.xi * item.qtde),
     0
   );
 
@@ -476,3 +540,21 @@ function mediaContinua(valores) {
 
   return media;
 }
+
+function desvioPadraoPopulacaoContinua(valores, media) {
+  // somatorio fi
+  let somatorio_fi = valores.reduce(
+    (acumulador, item) => acumulador + item.qtde,
+    0
+  );
+
+  let somatorio_valores = valores.reduce(
+    (acumulador, item) => acumulador + (Math.pow((item.xi - media), 2) * item.qtde),
+    0
+  );
+  
+  let desvio_padrao = Math.sqrt(somatorio_valores / somatorio_fi).toFixed(2);
+
+  return desvio_padrao;
+}
+

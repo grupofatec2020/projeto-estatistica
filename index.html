@@ -16,6 +16,10 @@
     <input type="text" id="nome_variavel" name="nome_variavel" placeholder="Digite a variavel, separando com ;"> 
     <br>
     <input type="text" id="dados_variavel" name="dados_variavel" placeholder="Digite os dados da variavel, separando com ;">
+    <select name="tipo_desvio" id="tipo_desvio">
+        <option value="amostra">Amostra</option>
+        <option value="populacao">População</option>
+    </select>
     <button id="tab_discreta" onclick="criarTabelaDiscreta()">Quantitativa Discreta</button>
     <button id="tab_ord_nom" onclick="criarTabelaOrdNom()">Qualitativa Ordinal/Nominal</button>
     <button id="calcular" onclick="gerarGraficoDiscreta()">Graficos Quantitativa Discreta</button>
@@ -65,6 +69,8 @@
         <div id="texto_media"></div>
         <div id="texto_moda"></div>
         <div id="texto_mediana"></div>
+        <div id="texto_desvio_padrao"></div>
+        <div id="texto_coeficiente_variacao"></div>
     </div>
     <div style="top:60px; left:10px; width:500px; height:500px;">
         <canvas id="myChart"></canvas>
