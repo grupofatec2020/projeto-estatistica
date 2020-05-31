@@ -3,7 +3,7 @@
 <head>
     <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <title>Page Title</title>
+    <title>Estatisca Descritiva</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <script src='script.js'></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
@@ -16,17 +16,23 @@
     <input type="text" id="nome_variavel" name="nome_variavel" placeholder="Digite a variavel, separando com ;"> 
     <br>
     <input type="text" id="dados_variavel" name="dados_variavel" placeholder="Digite os dados da variavel, separando com ;">
+    <select name="tipo_desvio" id="tipo_desvio">
+        <option value="amostra">Amostra</option>
+        <option value="populacao">População</option>
+    </select>
     <button id="tab_discreta" onclick="criarTabelaDiscreta()">Quantitativa Discreta</button>
     <button id="tab_ord_nom" onclick="criarTabelaOrdNom()">Qualitativa Ordinal/Nominal</button>
     <button id="calcular" onclick="gerarGraficoDiscreta()">Graficos Quantitativa Discreta</button>
     <button id="calcular" onclick="gerarGraficoQualitativa()">Graficos Qualitativa Nominal/Ordinal</button>
+    <button id="tab_continua" onclick="criarTabelaContinua()">Criar Tabela Continua</button>
+
     <div>
         <br>
         <label id="nome_tabela"></label>
     </div>
     <br>
 
-    <table border ="2">
+    <table border ="2" id="discreta_nominal_ordinal">
         <thead>
             <tr>
                 <th>Variavel</th>
@@ -41,11 +47,30 @@
 
         </tbody>
     </table>
+    
+    <table border ="2">
+        <thead>
+            <tr>
+                <th>Variavel</th>
+                <th>FI</th>
+                <th>FR%</th>
+                <th>FAC</th>
+                <th>FAC%</th>
+                <th>XI</th>
+            </tr>
+        </thead>
+        <!-- <tbody id="tabelabody"> -->
+        <tbody id="tbody_continua">
+
+        </tbody>
+    </table>
     <div>
         <br>
         <div id="texto_media"></div>
         <div id="texto_moda"></div>
         <div id="texto_mediana"></div>
+        <div id="texto_desvio_padrao"></div>
+        <div id="texto_coeficiente_variacao"></div>
     </div>
     <div style="top:60px; left:10px; width:500px; height:500px;">
         <canvas id="myChart"></canvas>
