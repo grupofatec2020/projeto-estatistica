@@ -11,6 +11,11 @@
 
 </head>
 <body>
+    <a href="probabilidade.html">Distruibuição Binomial</a>
+    <a href="distribuicao-normal.html">Distruibuição Normal</a>
+    <a href="distribuicao-uniforme.html">Distruibuição Uniforme</a>
+
+    <hr>
     <!-- nome_variavel é melhor até pra entender depois -->
     <!-- eu nao lembrava que podia usar _-->
     <input type="text" id="nome_variavel" name="nome_variavel" placeholder="Digite a variavel, separando com ;"> 
@@ -21,10 +26,11 @@
         <option value="populacao">População</option>
     </select>
     <button id="tab_discreta" onclick="criarTabelaDiscreta()">Quantitativa Discreta</button>
-    <button id="tab_ord_nom" onclick="criarTabelaOrdNom()">Qualitativa Ordinal/Nominal</button>
+    <button id="tab_nom" onclick="criarTabelaNom()">Qualitativa Nominal</button>
     <button id="calcular" onclick="gerarGraficoDiscreta()">Graficos Quantitativa Discreta</button>
     <button id="calcular" onclick="gerarGraficoQualitativa()">Graficos Qualitativa Nominal/Ordinal</button>
     <button id="tab_continua" onclick="criarTabelaContinua()">Criar Tabela Continua</button>
+    <button id="graf_continua" onclick="graficoContinua()">Graficos Quantitativa Continua</button>
 
     <div>
         <br>
