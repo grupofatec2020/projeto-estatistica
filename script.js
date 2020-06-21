@@ -245,12 +245,15 @@ function criarTabelaDiscreta() {
   });
 }
 
-function criarTabelaOrdNom() {
+function criarTabelaNom() {
   let corpo = document.querySelector("tbody");
   //limpar tela
   corpo.innerHTML = "";
-  array_valores = tratamentoDeDados();
-  valor_moda = moda();
+  array_valores = tratamentoDeDadosOrdinal();
+  valor_moda = modaOrdinal();
+  let valor_mediana = medianaNominal();
+  //mostrar mediana na tela
+  texto_mediana.innerHTML = `Mediana: ${valor_mediana} <br>`;
   //mostrar media na tela
   texto_media.innerHTML = "Media: Nao tem <br>";
   // nome tabela
@@ -258,7 +261,13 @@ function criarTabelaOrdNom() {
   nome_tabela.innerHTML = "Qualitativa Ordinal/Nominal";
   //mostrar moda na tela
   let texto_moda = document.getElementById("texto_moda");
-  texto_moda.innerHTML = `Moda: ${valor_moda.toFixed(2)} <b>`;
+  texto_moda.innerHTML = `Moda: ${valor_moda} <b>`;
+  //motrar desvio padrao
+  let texto_desvio_padrao = document.getElementById("texto_desvio_padrao");
+  texto_desvio_padrao.innerHTML = `Desvio Padrão: Nao tem <b>`;
+  //mostrar coeficiente de varancia
+  let texto_coeficiente = document.getElementById("texto_coeficiente_variacao");
+  texto_coeficiente.innerHTML = `Coeficiente de Variacao: Nao tem <b>`;
   // O que tem aqui é q esse loop cria uma linha <tr>, com algumas colunas (células) <td>
   // que depois dá pra usar aqui abaixo
   array_valores.forEach((e) => {
@@ -558,3 +567,158 @@ function desvioPadraoPopulacaoContinua(valores, media) {
   return desvio_padrao;
 }
 
+function graficoContinua(){
+  let array_valores = tratamentoDeDadosContinua();
+  let colors = [];
+  let array_label = [];
+
+  array_valores.forEach((e) => {
+    colors.push(getRandomColor());
+  })
+  var ctx = document.getElementById("myChart").getContext('2d');
+ var myChart = new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: [0, 1, 2, 3, 4],
+    datasets: [{
+      label: 'Group A',
+      data: [12, 19, 3, 5],
+      backgroundColor: colors,
+    }]
+  },
+  options: {
+    scales: {
+      xAxes: [{
+        display: false,
+        barPercentage: 1.30,
+      }, {
+        display: true,
+      }],
+      yAxes: [{
+        ticks: {
+          beginAtZero:true
+        }
+      }]
+    }
+  }
+});
+}
+
+function tratamentoDeDadosOrdinal() {
+  //recebendo dados do input
+  let dadosVar = document.getElementById("dados_variavel").value;
+  //dividindo os dados
+  // let array_variavel = variavel;
+  let array_dados_variavel = dadosVar.split(";");
+  //alfabeticamente
+  array_dados_variavel.sort();
+  console.log(array_dados_variavel);
+  //calcular quantidade de cada item
+  const quantidade_dados = array_dados_variavel.reduce((acumulador, atual) => {
+    acumulador[atual] = acumulador[atual] ? acumulador[atual] + 1 : 1;
+    return acumulador;
+  }, {});
+
+  // Array vazia que irá conter {nome: 'nome_digitado', valor: valor_digitado}
+  let array_valores = [];
+  // contador auxiliar
+  // percorrer todos os nomes digitados e adicionar na array "final" que será ordenada alfabeticamente
+  let valor_anterior;
+  array_dados_variavel.forEach((dados_variavel) => {
+    if (dados_variavel != valor_anterior) {
+      array_valores.push({
+        valor: dados_variavel,
+        qtde: quantidade_dados[dados_variavel],
+      });
+    }
+    valor_anterior = dados_variavel;
+  });
+
+  let total_dados = [];
+  array_valores.forEach((t) => {
+    total_dados.push(parseFloat(t.qtde));
+  });
+
+  // Somatório total
+  let resultado = total_dados.reduce(
+    (acumulador, item) => acumulador + item,
+    0
+  );
+
+  //calculo FA
+  //cont aux q
+  let k = 0;
+  let l = 0;
+  // o primeiro valor
+  // enquanto percorre, soma quantidade
+  array_valores.forEach((element) => {
+    element.fi = element.qtde;
+    element.fr_porcento = (element.qtde * 100) / resultado;
+    //Caso base, caso seja primeira vez no laco o FA eh o valor do item mesmo
+    if (k == 0) {
+      element.fa = parseFloat(element.qtde);
+      //caso seja um item depois do primeiro, soma o valor do FA do anterior com o atual
+    } else if (k > 0) {
+      //fa anterior q-1                        //valor do item atual
+      element.fa =
+        parseFloat(array_valores[k - 1].fa) + parseFloat(element.qtde);
+    }
+    k++;
+    if (l == 0) {
+      element.fa_porcento = parseFloat(element.fr_porcento);
+    } else if (l > 0) {
+      element.fa_porcento =
+        parseFloat(array_valores[l - 1].fa_porcento) +
+        parseFloat(element.fr_porcento);
+    }
+    l++;
+  });
+
+  return array_valores;
+}
+function modaOrdinal() {
+  let dadosVar = document.getElementById("dados_variavel").value;
+  let array_dados_variavel = dadosVar.split(";");
+  array_dados_variavel.sort();
+  let entrada = array_dados_variavel;
+  let maior = null;
+  let ocorrenciasMaior = -1;
+  let contagem = 1;
+  for (let i = 1; i <= entrada.length; i++) {
+    if (i < entrada.length && entrada[i] == entrada[i - contagem]) contagem++;
+    else if (contagem > ocorrenciasMaior) {
+      maior = entrada[i - 1];
+      ocorrenciasMaior = contagem;
+    }
+  }
+
+  return maior;
+}
+
+function medianaNominal() {
+  let dadosVar = document.getElementById("dados_variavel").value;
+  let array_dados_variavel = dadosVar.split(";");
+  array_dados_variavel.sort();
+  let md = array_dados_variavel;
+  let valor_mediana = "";
+  var posicao = md.length / 2;
+  let qtde = md.length;
+  let pos_elemento = "";
+  //console.log(posicao);
+  if (qtde % 2 == 0) {
+    if (md[posicao - 1] == md[posicao]) {
+      //Se for igual ele já declara que aquela é a mediana
+      valor_mediana = md[posicao];
+      return valor_mediana;
+    } else {
+      //Se não for aqui ele mostra o calculo da mediana
+      valor_mediana = (md[posicao] + md[posicao - 1]) / 2;
+      return valor_mediana;
+    }
+  } else {
+    //Se a posição for impar , ele da o numero da posição direto arredondando a posição com a função pronta math.round, mostrando a posicao do elemento
+    pos_elemento = Math.ceil(posicao) - 1;
+    //pegar a posicao do elemento e mostrar o valor do elemento
+    return md[pos_elemento];
+  }
+}
