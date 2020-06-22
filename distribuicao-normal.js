@@ -51,17 +51,23 @@ function escoreZ() {
     let valor_intervalo = document.getElementById("valor_intervalo").value;
     let z = 0;
     let probabilidade_final = 0;
+    let z_escore = 0;
 
     console.log(`valor_intervalo: ${valor_intervalo}`);
     console.log(`media: ${media}`);
     console.log(`dp: ${desvio_padrao}`);
     z = ((valor_intervalo - media) / desvio_padrao).toFixed(2);
-    console.log(`z antes do replace: ${z}`);
     z = z.replace('-', '');
-    console.log(`z: ${z}`);
 
+    if ( z >= 4) {
+        z_escore = 0.5;
+    } else {
+        z_escore = retornaZEscoreTabela(z.slice(0, 3), z.slice(3, 4));
+    }
+
+    
     // precisamos consultar na tabela de z-score
-    z_escore = retornaZEscoreTabela(z.slice(0, 3), z.slice(3, 4));
+    
 
     if (intervalo_selecionado === "maior") {
         probabilidade_final = maiorque(valor_intervalo, z_escore, media);
