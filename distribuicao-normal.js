@@ -1,5 +1,4 @@
 const tabela_z_escore = [
-        [00, 0.00, 0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.007, 0.08, 0.09],
         [0.0, 0.0000, 0.0040, 0.0080, 0.0120, 0.0160, 0.0199, 0.0239, 0.0279, 0.0319, 0.0359],
         [0.1, 0.0398, 0.0438, 0.0478, 0.0517, 0.0557, 0.0596, 0.0636, 0.0675, 0.0714, 0.0753],
         [0.2, 0.0793, 0.0832, 0.0871, 0.0910, 0.0948, 0.0987, 0.1026, 0.1064, 0.1103, 0.1141],
@@ -53,21 +52,19 @@ function escoreZ() {
     let probabilidade_final = 0;
     let z_escore = 0;
 
-    console.log(`valor_intervalo: ${valor_intervalo}`);
-    console.log(`media: ${media}`);
-    console.log(`dp: ${desvio_padrao}`);
-    z = ((valor_intervalo - media) / desvio_padrao).toFixed(2);
-    z = z.replace('-', '');
+    if ((intervalo_selecionado === "maior") || (intervalo_selecionado === "menor")) {
+        z = ((valor_intervalo - media) / desvio_padrao).toFixed(2);
+        z = z.replace('-', '');
 
-    if ( z >= 4) {
-        z_escore = 0.5;
-    } else {
-        z_escore = retornaZEscoreTabela(z.slice(0, 3), z.slice(3, 4));
+        // precisamos consultar na tabela de z-score
+        if ( z >= 4) {
+            z_escore = 0.5;
+        } else {
+            const linha_com_valor = buscaBinaria(tabela_z_escore, z.slice(0, 3), comparaValorLinha);
+            const indice = parseInt(z.slice(3, 4)) + 1; 
+            z_escore = linha_com_valor[indice]; // retornar valor no índice correto
+        }
     }
-
-    
-    // precisamos consultar na tabela de z-score
-    
 
     if (intervalo_selecionado === "maior") {
         probabilidade_final = maiorque(valor_intervalo, z_escore, media);
@@ -81,20 +78,20 @@ function escoreZ() {
 }
 
 // pesquisar o z-escora na tabela
-function retornaZEscoreTabela(valor, coluna) 
-{
-    const value = parseFloat(valor);
-    const idx_coluna = parseInt(coluna) + 1;
-    let valor_encontrado;
+// function retornaZEscoreTabela(valor, coluna) 
+// {
+//     const value = parseFloat(valor);
+//     const idx_coluna = parseInt(coluna) + 1;
+//     let valor_encontrado;
 
-    tabela_z_escore.forEach((linha) => {
-        if (linha[0] == value) {
-            valor_encontrado = linha[idx_coluna];
-        }
-    });
+//     tabela_z_escore.forEach((linha) => {
+//         if (linha[0] == value) {
+//             valor_encontrado = linha[idx_coluna];
+//         }
+//     });
 
-    return valor_encontrado;
-}
+//     return valor_encontrado;
+// }
 
 
 function maiorque(x, z_escore, media) {
@@ -110,20 +107,14 @@ function maiorque(x, z_escore, media) {
 }
 
 function menorque(x, z_escore, media) {
-    console.log(`media: ${media}`);
-    console.log(`x: ${x}`);
-    console.log(x);
     let probabilidade;
 
     if (x > media) {
         probabilidade = (0.5 + z_escore) * 100;
-        console.log(probabilidade)
     } else if (x < media) {
         probabilidade = (0.5 - z_escore) * 100;
-        console.log(probabilidade)
     }
     
-    console.log(probabilidade)
     return probabilidade.toFixed(2);
 
 }
@@ -138,7 +129,6 @@ function entreValores() {
 
     // algum dos valores informados é igual a média
     if ((dados_split[0] == media) || (dados_split[1] == media)) {
-        console.log(dados_split);
         if (dados_split[0] != media) {
             valor_intervalo = dados_split[0];
         } else {
@@ -148,7 +138,10 @@ function entreValores() {
         z = ((valor_intervalo - media) / desvio_padrao).toFixed(2);
         z = z.replace('-', '');
         
-        z_escore = retornaZEscoreTabela(z.slice(0, 3), z.slice(3, 4));
+        let linha_com_valor = buscaBinaria(tabela_z_escore, z.slice(0, 3), comparaValorLinha);
+        let indice = parseInt(z.slice(3, 4)) + 1;
+        z_escore = linha_com_valor[indice];
+        // z_escore = retornaZEscoreTabela(z.slice(0, 3), z.slice(3, 4));
 
         probabilidade = z_escore * 100;
 
@@ -160,14 +153,20 @@ function entreValores() {
             z = ((valor_intervalo - media) / desvio_padrao).toFixed(2);
             z = z.replace('-', '');
             
-            z_escore = retornaZEscoreTabela(z.slice(0, 3), z.slice(3, 4));
+            linha_com_valor = buscaBinaria(tabela_z_escore, z.slice(0, 3), comparaValorLinha);
+            indice = parseInt(z.slice(3, 4)) + 1;
+            z_escore = linha_com_valor[indice];
+            // z_escore = retornaZEscoreTabela(z.slice(0, 3), z.slice(3, 4));
             acc = z_escore;
 
             valor_intervalo = dados_split[1];
             z = ((valor_intervalo - media) / desvio_padrao).toFixed(2);
             z = z.replace('-', '');
             
-            z_escore = retornaZEscoreTabela(z.slice(0, 3), z.slice(3, 4));
+            linha_com_valor = buscaBinaria(tabela_z_escore, z.slice(0, 3), comparaValorLinha);
+            indice = parseInt(z.slice(3, 4)) + 1;
+            z_escore = linha_com_valor[indice];
+            // z_escore = retornaZEscoreTabela(z.slice(0, 3), z.slice(3, 4));
             acc = acc + z_escore;
 
             probabilidade = acc * 100;
@@ -178,7 +177,10 @@ function entreValores() {
             z = ((valor_intervalo - media) / desvio_padrao).toFixed(2);
             z = z.replace('-', '');
             
-            z_escore = retornaZEscoreTabela(z.slice(0, 3), z.slice(3, 4));
+            linha_com_valor = buscaBinaria(tabela_z_escore, z.slice(0, 3), comparaValorLinha);
+            indice = parseInt(z.slice(3, 4)) + 1;
+            z_escore = linha_com_valor[indice];
+            // z_escore = retornaZEscoreTabela(z.slice(0, 3), z.slice(3, 4));
             acc = z_escore;
 
 
@@ -186,7 +188,10 @@ function entreValores() {
             z = ((valor_intervalo - media) / desvio_padrao).toFixed(2);
             z = z.replace('-', '');
             
-            z_escore = retornaZEscoreTabela(z.slice(0, 3), z.slice(3, 4));
+            linha_com_valor = buscaBinaria(tabela_z_escore, z.slice(0, 3), comparaValorLinha);
+            indice = parseInt(z.slice(3, 4)) + 1;
+            z_escore = linha_com_valor[indice];
+            // z_escore = retornaZEscoreTabela(z.slice(0, 3), z.slice(3, 4));
             acc = acc - z_escore;
 
             if (acc < 0) {
@@ -197,9 +202,40 @@ function entreValores() {
         }
    }
 
-    // if (dados < media || dados > media) {
-    //     probabilidade = z_escore * 100;
-    // }
-
     return probabilidade.toFixed(2);
+}
+
+
+function buscaBinaria(vet, busca, fnComp, posIni = 0, posFim = vet.length - 1) {
+    // Math.floor() arredonda o resultado do cálculo para baixo
+    const posMeio = Math.floor((posIni + posFim) / 2);
+ 
+    let resultadoComp = fnComp(busca, vet[posMeio])
+ 
+    if(resultadoComp == 0) {
+       return vet[posMeio]; // Achou a linha com valor esperado na posição 0
+    }
+    else if (posIni == posFim) {
+       return -1; // Não existe
+    }
+    else if (resultadoComp < 0) {
+       posFim = posMeio - 1;
+       console.log(`${posIni} - ${posFim}`);
+       return buscaBinaria(vet, busca, fnComp, posIni, posFim);
+    }
+    else { // fnComp(busca, vet[posMeio]) > 0
+       posIni = posMeio + 1;
+       console.log(`${posIni} - ${posFim}`);
+       return buscaBinaria(vet, busca, fnComp, posIni, posFim);
+    }
+}
+
+function comparaValorLinha(valor_buscado, objeto) {
+    if (valor_buscado == objeto[0]) {
+        return 0;
+    } else if (valor_buscado > objeto[0]) {
+        return 1;
+    } else {
+        return -1;
+    }
 }

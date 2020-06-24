@@ -15,7 +15,7 @@ function tratamentoDeDados() {
   // let array_variavel = variavel;
   let array_dados_variavel = dadosVar.split(";").map(Number);
   //alfabeticamente
-  array_dados_variavel.sort((a, b) => a - b);
+  array_dados_variavel = quickSort(array_dados_variavel);
   //calcular quantidade de cada item
   const quantidade_dados = array_dados_variavel.reduce((acumulador, atual) => {
     acumulador[atual] = acumulador[atual] ? acumulador[atual] + 1 : 1;
@@ -99,7 +99,8 @@ function media(valores) {
 function moda() {
   let dadosVar = document.getElementById("dados_variavel").value;
   let array_dados_variavel = dadosVar.split(";").map(Number);
-  array_dados_variavel.sort((a, b) => a - b);
+  //array_dados_variavel.sort((a, b) => a - b);
+  array_dados_variavel = quickSort(array_dados_variavel);
   let entrada = array_dados_variavel;
   let maior = null;
   let ocorrenciasMaior = -1;
@@ -117,7 +118,8 @@ function moda() {
 function mediana() {
   let dadosVar = document.getElementById("dados_variavel").value;
   let array_dados_variavel = dadosVar.split(";").map(Number);
-  array_dados_variavel.sort((a, b) => a - b);
+  //array_dados_variavel.sort((a, b) => a - b);
+  array_dados_variavel = quickSort(array_dados_variavel);
   let md = array_dados_variavel;
   let valor_mediana = "";
   var posicao = md.length / 2;
@@ -311,7 +313,7 @@ function gerarGraficoDiscreta() {
   let dadosVar = document.getElementById("dados_variavel").value;
   let nome = document.getElementById("nome_variavel").value;
   let array_dados_variavel = dadosVar.split(";").map(Number);
-  array_dados_variavel.sort((a, b) => a - b);
+  array_dados_variavel = quickSort(array_dados_variavel);
   let ctx = document.getElementById("myChart");
   let grafico = new Chart(ctx, {
     // tipo grafico
@@ -349,7 +351,7 @@ function gerarGraficoQualitativa() {
   let dadosVar = document.getElementById("dados_variavel").value;
   let nome = document.getElementById("nome_variavel").value;
   let array_dados_variavel = dadosVar.split(";").map(Number);
-  array_dados_variavel.sort((a, b) => a - b);
+  array_dados_variavel = quickSort(array_dados_variavel);
   let ctx = document.getElementById("myChart");
   let grafico = new Chart(ctx, {
     // tipo de grafico
@@ -376,7 +378,9 @@ function tratamentoDeDadosContinua() {
   //descobrir a amplitude
   let dadosVar = document.getElementById("dados_variavel").value;
   let array_dados_variavel = dadosVar.split(";").map(Number);
-  array_dados_variavel.sort((a, b) => a - b);
+  // array_dados_variavel.sort((a, b) => a - b);
+  array_dados_variavel = quickSort(array_dados_variavel);
+  console.log(array_dados_variavel);
   let at = array_dados_variavel.slice(-1) - array_dados_variavel[0];
   //quantidade de classes
   let classe = [];
@@ -611,7 +615,7 @@ function tratamentoDeDadosOrdinal() {
   // let array_variavel = variavel;
   let array_dados_variavel = dadosVar.split(";");
   //alfabeticamente
-  array_dados_variavel.sort();
+  array_dados_variavel = quickSort(array_dados_variavel);
   console.log(array_dados_variavel);
   //calcular quantidade de cada item
   const quantidade_dados = array_dados_variavel.reduce((acumulador, atual) => {
@@ -679,7 +683,7 @@ function tratamentoDeDadosOrdinal() {
 function modaOrdinal() {
   let dadosVar = document.getElementById("dados_variavel").value;
   let array_dados_variavel = dadosVar.split(";");
-  array_dados_variavel.sort();
+  array_dados_variavel = quickSort(array_dados_variavel);
   let entrada = array_dados_variavel;
   let maior = null;
   let ocorrenciasMaior = -1;
@@ -698,7 +702,7 @@ function modaOrdinal() {
 function medianaNominal() {
   let dadosVar = document.getElementById("dados_variavel").value;
   let array_dados_variavel = dadosVar.split(";");
-  array_dados_variavel.sort();
+  array_dados_variavel = quickSort(array_dados_variavel);
   let md = array_dados_variavel;
   let valor_mediana = "";
   var posicao = md.length / 2;
@@ -721,4 +725,63 @@ function medianaNominal() {
     //pegar a posicao do elemento e mostrar o valor do elemento
     return md[pos_elemento];
   }
+}
+
+// Funções para ordenação com quick-sort
+function troca(vet, i, j) {
+   let aux = vet[i];
+   vet[i] = vet[j];
+   vet[j] = aux;
+}
+
+// Parâmetros opcionais:
+// posIni: se não for informado, assume o valor 0
+// posFim: se não for informado, assume o tamanho do vetor - 1
+function quickSort(vet, fnComp, posIni = 0, posFim = vet.length - 1) {
+   // Condição de saída da recursividade: o subvetor
+   // a ser ordenado precisa ter mais que um elemento
+   if(posFim > posIni) {
+      const posPivot = posFim
+      let posDiv = posIni - 1
+      // Percorre o vetor do início até a penúltima posição.
+      // Quando o elemento atual for menor que o elemento pivô,
+      // incrementa posDiv e faz a troca dos valores que estão
+      // nas posições i e posDiv entre si.
+      for(let i = posIni; i < posFim; i++) {
+         /************************
+          * 
+            USO DE FUNÇÃO DE COMPARAÇÃO
+
+            Para tornar o algoritmo de ordenação mais flexível e capaz de
+            ordenar tipos de dados não comparáveis diretamente pela linguagem,
+            é possivel passar uma função que será usada para comparar dois valores
+            quaisquer. Essa função será chamada toda vez que for necessário comparar
+            dois valores para ordenação.
+         
+         */
+
+         /* COMPARAÇÃO EMBUTIDA: SÓ FUNCIONA PARA NÚMEROS E STRINGS */
+         if(vet[i] < vet[posPivot] && i != posDiv) {
+         
+         /* COMPARAÇÃO VIA FUNÇÃO: A FUNÇÃO SE RESPONSABILIZA POR DETERMINAR
+            A ORDEM DOS ELEMENTOS COMPARADOS */
+         //if(fnComp(vet[posPivot], vet[i])) {
+            posDiv++
+            troca(vet, i, posDiv)
+         }
+      }
+      // Após terminado o percurso, é necessário colocar o
+      // pivô no lugar correto. Para isso, incrementa-se o
+      // posDiv uma última vez e efetua-se a troca dos valores
+      // das posições posDiv e posPivot entre si.
+      posDiv++
+      troca(vet, posDiv, posPivot)
+
+      // Ordena o subvetor à esquerda do pivô (que está na posDiv)
+      quickSort(vet, fnComp, posIni, posDiv - 1)
+
+      // Ordena o subvetor à direita do pivô
+      quickSort(vet, fnComp, posDiv + 1, posFim)
+   }
+   return vet;
 }
