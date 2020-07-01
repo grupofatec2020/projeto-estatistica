@@ -93,40 +93,60 @@ function calcularRegressao() {
     return texto_resultado;
 }
 
-function grafico(){
-    let valor_x = dadosX();
-    let valor_y = dadosY();
-    let pontos = [];
-    let colors = getRandomColor();
+// function grafico(){
+//     let valor_x = dadosX();
+//     let valor_y = dadosY();
+//     let pontos = [];
+//     let colors = getRandomColor();
 
-    valor_x.forEach((x, idx) => {
-        pontos.push({
-            x: x, 
-            y: valor_y[idx]
-        });
-    });
+//     valor_x.forEach((x, idx) => {
+//         pontos.push({
+//             x: x, 
+//             y: valor_y[idx]
+//         });
+//     });
 
-    let ctx = document.getElementById("myChart");
-    let scatterChart = new Chart(ctx, {
-        type: 'scatter',
-        title: 'Gráfico de dispersão',
-        data: {
-            datasets: [{
-                backgroundColor: colors,
-                label: 'Valores',
-                data: pontos,
-            }]
-        },
-        options: {
-            scales: {
-                xAxes: [{
-                    type: 'linear',
-                    position: 'bottom',
-                }],
-            },
-        }
-    });
-}
+//     let ctx = document.getElementById("myChart");
+//     let scatterChart = new Chart(ctx, {
+//         type: 'scatter',
+//         title: 'Gráfico de dispersão',
+//         data: {
+//             datasets: [{
+//                 backgroundColor: colors,
+//                 label: 'Valores',
+//                 data: pontos,
+//             }]
+//         },
+//         options: {
+//             scales: {
+//                 xAxes: [{
+//                     type: 'linear',
+//                     position: 'bottom',
+//                 }],
+//             },
+//         },
+//         tooltips: {
+//             mode: 'index',
+//             intersect: true
+//           },
+//         annotation: {
+//             annotations: [{
+//               type: 'line',
+//               mode: 'horizontal',
+//               scaleID: 'y-axis-0',
+//               value: 2225,
+//               endValue: 0,
+//               borderColor: 'rgb(75, 192, 192)',
+//               borderWidth: 4,
+//               label: {
+//                 enabled: true,
+//                 content: 'Trendline',
+//                 yAdjust: -16,
+//               }
+//             }]
+//         }
+//     });
+// }
 
 function calcularCorrelacao() {
     const n_x_split = dadosX().length;
@@ -157,3 +177,29 @@ function getRandomColor() {
     }
     return color;
   }
+
+function drawChart() {
+    let valor_x = dadosX();
+    let valor_y = dadosY();
+
+    var data = new google.visualization.DataTable();
+    data.addColumn('number', 'X');
+    data.addColumn('number', 'Y');
+    valor_x.forEach((x, idx) => {
+        data.addRows([
+            [x, valor_y[idx]],
+        ]);
+    });
+
+    var options = {
+        title: 'Correlação',
+        hAxis: {title: 'X', minValue: Math.min(valor_x), maxValue: Math.max(valor_x)},
+        vAxis: {title: 'Y', minValue: Math.min(valor_y), maxValue: Math.max(valor_y)},
+        legend: 'none',
+        trendlines: { 0: {} }
+    };
+
+    var chart = new google.visualization.ScatterChart(document.getElementById('myChart'));
+
+    chart.draw(data, options);
+}

@@ -5,11 +5,10 @@
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <title>probabilidade</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <script src='correlacao-regressao.js'></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-
-
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">google.charts.load('current', {packages: ['corechart']});</script>
+    <script src='correlacao-regressao.js'></script>
 </head>
 <body>
     <h2>Correlacao e Regressao</h2>
@@ -26,14 +25,13 @@
         
         <br>
             <button id="Calcular" onclick="calcularCorrelacao()">Calcular</button>
-            <button id="Calcular" onclick="grafico()">Grafico</button>
+            <button id="Calcular" onclick="drawChart()">Grafico</button>
         </br>
         <br>
             <div id="texto_regressao"></div>
             <div id="texto_correlacao"></div>
         </br>
-        <div style="top:60px; left:10px; width:500px; height:500px;">
-            <canvas id="myChart"></canvas>
+        <div id="myChart" style="width: 900px; height: 500px;"></div>
         </div>
         </div>
         <div id="container">
