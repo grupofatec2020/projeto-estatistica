@@ -5,19 +5,22 @@
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <title>Estatisca Descritiva</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <script src='script.js'></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
-
+    <script src="https://unpkg.com/papaparse@latest/papaparse.min.js"></script>
+    <script src='script.js'></script>
 
 </head>
 <body>
     <a href="probabilidade.html">Distruibuição Binomial</a>
     <a href="distribuicao-normal.html">Distruibuição Normal</a>
     <a href="distribuicao-uniforme.html">Distruibuição Uniforme</a>
+    <a href="correlacao-regressao.html">Correlação e Regressão</a>
 
     <hr>
     <!-- nome_variavel é melhor até pra entender depois -->
     <!-- eu nao lembrava que podia usar _-->
+    <input type="file" name="upload-csv" id="arquivo">
+    <button id="btn-upload-csv" onclick="lerCSV()">Carregar CSV</button> <br>
     <input type="text" id="nome_variavel" name="nome_variavel" placeholder="Digite a variavel, separando com ;"> 
     <br>
     <input type="text" id="dados_variavel" name="dados_variavel" placeholder="Digite os dados da variavel, separando com ;">
@@ -25,10 +28,13 @@
         <option value="amostra">Amostra</option>
         <option value="populacao">População</option>
     </select>
+    <br>
+    <button id="tab_ord" onclick="criarTabelaOrd()">Qualitativa Ordinal</button>
     <button id="tab_discreta" onclick="criarTabelaDiscreta()">Quantitativa Discreta</button>
     <button id="tab_nom" onclick="criarTabelaNom()">Qualitativa Nominal</button>
     <button id="calcular" onclick="gerarGraficoDiscreta()">Graficos Quantitativa Discreta</button>
-    <button id="calcular" onclick="gerarGraficoQualitativa()">Graficos Qualitativa Nominal/Ordinal</button>
+    <button id="calcular" onclick="gerarGraficoQualitativaOrdinal()">Graficos Qualitativa Ordinal</button>
+    <button id="calcular" onclick="gerarGraficoQualitativaNominal()">Graficos Qualitativa Nominal</button>
     <button id="tab_continua" onclick="criarTabelaContinua()">Criar Tabela Continua</button>
     <button id="graf_continua" onclick="graficoContinua()">Graficos Quantitativa Continua</button>
 
@@ -82,5 +88,4 @@
         <canvas id="myChart"></canvas>
     </div>
 </body>
-<script src='script.js'></script>
 </html>
