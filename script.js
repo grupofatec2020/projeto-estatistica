@@ -922,7 +922,7 @@ function lerCSV() {
       results.data[0].forEach((item) => {
         string_valores += item + ";";
       });
-      document.getElementById("dados_variavel").value = string_valores;
+      document.getElementById("dados_variavel").value = string_valores.slice(0, -1);
     },
   });
 }
