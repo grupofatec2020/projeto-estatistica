@@ -255,6 +255,10 @@ function coeficienteVariacaoDiscreta(desvio_padrao, media) {
 
 //criando tabela discreta
 function criarTabelaDiscreta() {
+  limparResultados();
+  let div_tabela_discreta = document.getElementById("div_tabela_discreta_nominal_ordinal");
+  div_tabela_discreta.style.display = 'block';
+
   const tipo_desvio = document.getElementById("tipo_desvio").value;
   let corpo = document.querySelector("tbody");
   //limpar tela
@@ -315,9 +319,14 @@ function criarTabelaDiscreta() {
     linha.appendChild(campo_fa_porcento);
     corpo.appendChild(linha);
   });
+  gerarGraficoDiscreta();
 }
 
 function criarTabelaNom() {
+  limparResultados();
+  let div_tabela_discreta = document.getElementById("div_tabela_discreta_nominal_ordinal");
+  div_tabela_discreta.style.display = 'block';
+
   let corpo = document.querySelector("tbody");
   //limpar tela
   corpo.innerHTML = "";
@@ -330,7 +339,7 @@ function criarTabelaNom() {
   texto_media.innerHTML = "Media: Nao tem <br>";
   // nome tabela
   let nome_tabela = document.getElementById("nome_tabela");
-  nome_tabela.innerHTML = "Qualitativa Ordinal/Nominal";
+  nome_tabela.innerHTML = "Qualitativa Nominal";
   //mostrar moda na tela
   let texto_moda = document.getElementById("texto_moda");
   texto_moda.innerHTML = `Moda: ${valor_moda} <b>`;
@@ -366,6 +375,8 @@ function criarTabelaNom() {
     linha.appendChild(campo_fa_porcento);
     corpo.appendChild(linha);
   });
+
+  gerarGraficoQualitativaNominal();
 }
 
 function gerarGraficoDiscreta() {
@@ -376,8 +387,8 @@ function gerarGraficoDiscreta() {
 
   /// talvez gerar as cores aqui tbm
   array_valores.forEach((e) => {
-    array_label.push(e.nome);
-    array_data.push(e.fr_porcento);
+    array_label.push(e.valor);
+    array_data.push(Math.round(e.fr_porcento));
     colors.push(getRandomColor());
   });
   let dadosVar = document.getElementById("dados_variavel").value;
@@ -390,18 +401,25 @@ function gerarGraficoDiscreta() {
     type: "bar",
     // data para o grafico
     data: {
-      // labels: textoVariavel,
-      labels: array_dados_variavel,
+      labels: array_label,
       datasets: [
         {
           label: nome,
           backgroundColor: colors,
           borderColor: "rgba(0, 0, 0, 0.1)",
           data: array_data,
-          // data: texto_fr_porcento,
         },
       ],
     },
+    options: {
+      scales: {
+          yAxes: [{
+              ticks: {
+                  beginAtZero: true
+              },
+          }],
+        },
+      },
   });
 }
 
@@ -413,7 +431,7 @@ function gerarGraficoQualitativaOrdinal() {
 
   /// talvez gerar as cores aqui tbm
   array_valores.forEach((e) => {
-    array_label.push(e.nome);
+    array_label.push(e.valor);
     array_data.push(e.fr_porcento);
     colors.push(getRandomColor());
   });
@@ -426,17 +444,14 @@ function gerarGraficoQualitativaOrdinal() {
   let grafico = new Chart(ctx, {
     // tipo de grafico
     type: "pie",
-    // data para o grafico
     data: {
-      // labels: textoVariavel,
-      labels: array_dados_variavel,
+      labels: array_label,
       datasets: [
         {
           label: nome,
           backgroundColor: colors,
           borderColor: "rgba(0, 0, 0, 0.1)",
           data: array_data,
-          // data: texto_fr_porcento,
         },
       ],
     },
@@ -451,7 +466,7 @@ function gerarGraficoQualitativaNominal() {
 
   /// talvez gerar as cores aqui tbm
   array_valores.forEach((e) => {
-    array_label.push(e.nome);
+    array_label.push(e.valor);
     array_data.push(e.fr_porcento);
     colors.push(getRandomColor());
   });
@@ -466,15 +481,13 @@ function gerarGraficoQualitativaNominal() {
     type: "pie",
     // data para o grafico
     data: {
-      // labels: textoVariavel,
-      labels: array_dados_variavel,
+      labels: array_label,
       datasets: [
         {
           label: nome,
           backgroundColor: colors,
           borderColor: "rgba(0, 0, 0, 0.1)",
           data: array_data,
-          // data: texto_fr_porcento,
         },
       ],
     },
@@ -487,7 +500,6 @@ function tratamentoDeDadosContinua() {
   let dadosVar = document.getElementById("dados_variavel").value;
   let array_dados_variavel = dadosVar.split(";").map(Number);
   array_dados_variavel = quickSort(array_dados_variavel);
-  console.log(array_dados_variavel);
   let at = array_dados_variavel.slice(-1) - array_dados_variavel[0];
   //quantidade de classes
   let classe = [];
@@ -527,6 +539,7 @@ function tratamentoDeDadosContinua() {
       valor: `${valor_anterior} |----- ${limite_classe}`,
       qtde: qtde_itens_intervalo.length,
       xi: Math.ceil((limite_classe + valor_anterior) / 2),
+      intervalo_classes:  intervalo_classes,
     });
 
     valor_anterior = valor_anterior + intervalo_classes;
@@ -573,13 +586,16 @@ function tratamentoDeDadosContinua() {
     l++;
   });
 
-  console.log(array_final_continua);
   return array_final_continua;
 }
 
 //criando tabela continua
 function criarTabelaContinua() {
-  let corpo = document.getElementById("tbody_continua");
+  limparResultados();
+  let div_tabela_continua = document.getElementById("div_tabela_continua");
+  div_tabela_continua.style.display = 'block';
+
+  let corpo = document.getElementById("tabela_continua");
   //limpar tela
   corpo.innerHTML = "";
   let array_valores = tratamentoDeDadosContinua();
@@ -588,9 +604,7 @@ function criarTabelaContinua() {
   let valor_mediana = mediana();
   let desvio_padrao = desvioPadraoPopulacaoContinua(array_valores, media_continua);
   let coeficiente_variacao_continua = coeficienteVariacaoDiscreta(desvio_padrao, media_continua);
-  console.log(media_continua);
-  console.log(desvio_padrao);
-  console.log(coeficiente_variacao_continua);
+
   //motrar desvio padrao
   let texto_desvio_padrao = document.getElementById("texto_desvio_padrao");
   texto_desvio_padrao.innerHTML = `Desvio Padrão ${desvio_padrao} <b>`;
@@ -640,6 +654,8 @@ function criarTabelaContinua() {
     linha.appendChild(campo_xi);
     corpo.appendChild(linha);
   });
+
+  gerarGraficoContinua();
 }
 
 function mediaContinua(valores) {
@@ -675,33 +691,33 @@ function desvioPadraoPopulacaoContinua(valores, media) {
   return desvio_padrao;
 }
 
-function graficoContinua(){
+function gerarGraficoContinua() {
   let array_valores = tratamentoDeDadosContinua();
-  let colors = [];
   let array_label = [];
-  console.log(array_valores)
+  let array_data = [];
+  let nome_variavel = document.getElementById("nome_variavel").value;
 
   array_valores.forEach((e) => {
-    colors.push(getRandomColor());
-  })
+    array_label.push(e.valor);
+    array_data.push(e.qtde);
+  });
+
   var ctx = document.getElementById("myChart").getContext('2d');
- var myChart = new Chart(ctx, {
+  var myChart = new Chart(ctx, {
   type: 'bar',
   data: {
     labels: array_label,
     datasets: [{
-      label: 'Group A',
-      data: array_valores.xi,
-      backgroundColor: colors,
+      label: nome_variavel,
+      data: array_data,
+      backgroundColor: getRandomColor(),
     }]
   },
   options: {
     scales: {
       xAxes: [{
-        display: false,
-        barPercentage: 1.30,
-      }, {
-        display: true,
+        categoryPercentage: 1.0,
+        barPercentage: 1.0,
       }],
       yAxes: [{
         ticks: {
@@ -716,12 +732,13 @@ function graficoContinua(){
 function tratamentoDeDadosOrdinal() {
   //recebendo dados do input
   let dadosVar = document.getElementById("dados_variavel").value;
+  let ordem_dados = (document.getElementById("ordem_valores").value).split(';');
+  let dados_incorretos = false;
   //dividindo os dados
   // let array_variavel = variavel;
   let array_dados_variavel = dadosVar.split(";");
-  console.log(array_dados_variavel);
   //alfabeticamente
-  //array_dados_variavel = quickSort(array_dados_variavel);
+  array_dados_variavel = quickSort(array_dados_variavel);
   ///console.log(array_dados_variavel);
   //calcular quantidade de cada item
   const quantidade_dados = array_dados_variavel.reduce((acumulador, atual) => {
@@ -744,8 +761,31 @@ function tratamentoDeDadosOrdinal() {
     valor_anterior = dados_variavel;
   });
 
+  // TODO: ordenar de acordo com usuário
+  // percorrer array de valores e verificar se "batem" com os dados ordenados
+  ordem_dados.forEach((valor) => {
+    if (array_dados_variavel.includes(valor) !== true) {
+      dados_incorretos = true;
+      return;
+    }
+  });
+
+  if (dados_incorretos === true) {
+      alert('valores incorretos');
+      return false;
+  }
+
+  let array_valores_ordenado = [];
+  ordem_dados.forEach((valor_ordem) => {
+    array_valores.forEach((item) => { 
+      if (item.valor === valor_ordem) {
+        array_valores_ordenado.push(item);
+      }
+    });
+  });
+
   let total_dados = [];
-  array_valores.forEach((t) => {
+  array_valores_ordenado.forEach((t) => {
     total_dados.push(parseFloat(t.qtde));
   });
 
@@ -761,7 +801,7 @@ function tratamentoDeDadosOrdinal() {
   let l = 0;
   // o primeiro valor
   // enquanto percorre, soma quantidade
-  array_valores.forEach((element) => {
+  array_valores_ordenado.forEach((element) => {
     element.fi = element.qtde;
     element.fr_porcento = (element.qtde * 100) / resultado;
     //Caso base, caso seja primeira vez no laco o FA eh o valor do item mesmo
@@ -771,20 +811,20 @@ function tratamentoDeDadosOrdinal() {
     } else if (k > 0) {
       //fa anterior q-1                        //valor do item atual
       element.fa =
-        parseFloat(array_valores[k - 1].fa) + parseFloat(element.qtde);
+        parseFloat(array_valores_ordenado[k - 1].fa) + parseFloat(element.qtde);
     }
     k++;
     if (l == 0) {
       element.fa_porcento = parseFloat(element.fr_porcento);
     } else if (l > 0) {
       element.fa_porcento =
-        parseFloat(array_valores[l - 1].fa_porcento) +
+        parseFloat(array_valores_ordenado[l - 1].fa_porcento) +
         parseFloat(element.fr_porcento);
     }
     l++;
   });
 
-  return array_valores;
+  return array_valores_ordenado;
 }
 function modaOrdinal() {
   let dadosVar = document.getElementById("dados_variavel").value;
@@ -834,10 +874,17 @@ function medianaNominal() {
 }
 
 function criarTabelaOrd() {
+  limparResultados();
   let corpo = document.querySelector("tbody");
-  //limpar tela
-  corpo.innerHTML = "";
+  let div_tabela_discreta = document.getElementById("div_tabela_discreta_nominal_ordinal");
+  div_tabela_discreta.style.display = 'block';
+
   array_valores = tratamentoDeDadosOrdinal();
+
+  if (array_valores === false) {
+    return;
+  }
+
   valor_moda = modaOrdinal();
   let valor_mediana = medianaNominal();
   //mostrar mediana na tela
@@ -882,6 +929,8 @@ function criarTabelaOrd() {
     linha.appendChild(campo_fa_porcento);
     corpo.appendChild(linha);
   });
+
+  gerarGraficoQualitativaOrdinal();
 }
 
 // Funções para ordenação com quick-sort
@@ -925,4 +974,37 @@ function lerCSV() {
       document.getElementById("dados_variavel").value = string_valores.slice(0, -1);
     },
   });
+}
+
+function limparResultados()
+{
+  let texto_media = document.getElementById("texto_media");
+  texto_media.innerHTML = "" 
+
+  let discreta_nominal_ordinal = document.getElementById("discreta_nominal_ordinal");
+  discreta_nominal_ordinal.innerHTML = "";
+
+  let div_tabela_discreta = document.getElementById("div_tabela_discreta_nominal_ordinal");
+  div_tabela_discreta.style.display = 'none';
+
+  let div_tabela_continua = document.getElementById("div_tabela_continua");
+  div_tabela_continua.style.display = 'none';
+
+  let tabela_continua = document.getElementById("tabela_continua");
+  tabela_continua.innerHTML = "";
+
+  let texto_moda = document.getElementById("texto_moda");
+  texto_moda.innerHTML = "" 
+
+  let texto_mediana = document.getElementById("texto_mediana");
+  texto_mediana.innerHTML = "" 
+
+  let texto_desvio_padrao = document.getElementById("texto_desvio_padrao");
+  texto_desvio_padrao.innerHTML = "" 
+
+  let texto_coeficiente_variacao = document.getElementById("texto_coeficiente_variacao");
+  texto_coeficiente_variacao.innerHTML = "" 
+
+  document.getElementById("container_grafico").innerHTML = '&nbsp;';
+  document.getElementById("container_grafico").innerHTML = '<canvas id="myChart"></canvas>';
 }
