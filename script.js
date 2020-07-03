@@ -379,6 +379,35 @@ function criarTabelaNom() {
   gerarGraficoQualitativaNominal();
 }
 
+// function continua() {
+// let min = Math.min(...array_valores)
+//         let max = Math.max(...array_valores)
+//         let at = max - min
+
+//         // CLASSES/LINHAS
+//         let cl = Math.floor(Math.sqrt(total))
+//         let vetClass = [cl - 1, cl, cl + 1]
+
+//         // INTERVALO DE CLASSES
+//         for (let i = at + 1; i != 0; i++) {
+//             if (i % vetClass[0] == 0) {
+//                 at = i;
+//                 cl = vetClass[0];
+//                 break;
+//             } else if (i % vetClass[1] == 0) {
+//                 at = i;
+//                 cl = vetClass[1];
+//                 break;
+//             } else if (i % vetClass[2] == 0) {
+//                 at = i;
+//                 cl = vetClass[2];
+//                 break;
+//             }
+//         }
+//         let ic = (at / cl);
+//       }
+//     console.log(at);
+
 function gerarGraficoDiscreta() {
   array_valores = tratamentoDeDados();
   array_label = [];
@@ -726,7 +755,7 @@ function gerarGraficoContinua() {
       }]
     }
   }
-})
+});
 }
 
 function tratamentoDeDadosOrdinal() {
