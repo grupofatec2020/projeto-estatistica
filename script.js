@@ -1,3 +1,145 @@
+function inserirDados(){
+  if (document.getElementById("tipo_tabela").value === "nominal"){
+    let up_input = document.getElementById("arquivo")
+    up_input.style.display = 'block'
+    let up_botao = document.getElementById("btn-upload-csv")
+    up_botao.style.display = 'block'
+    let label = document.getElementById("label_nome")
+    label.style.display = 'block'
+    let nome = document.getElementById("nome_variavel")
+    nome.style.display = 'block'
+    let label_dados = document.getElementById("label_dados")
+    label_dados.style.display = 'block'
+    let dados = document.getElementById("dados_variavel")
+    dados.style.display = 'block'
+    let botao = document.getElementById("calcular")
+    botao.style.display = 'block'
+  } if (document.getElementById("tipo_tabela").value === "ordinal") {
+    let up_input = document.getElementById("arquivo")
+    up_input.style.display = 'block'
+    let up_botao = document.getElementById("btn-upload-csv")
+    up_botao.style.display = 'block'
+    let label = document.getElementById("label_nome")
+    label.style.display = 'block'
+    let nome1 = document.getElementById("nome_variavel")
+    nome1.style.display = 'block'
+    let label_dados = document.getElementById("label_dados")
+    label_dados.style.display = 'block'
+    let dados = document.getElementById("dados_variavel")
+    dados.style.display = 'block'
+    let nome = document.getElementById("nome_ordem");
+    nome.style.display = 'block';
+    let ordem = document.getElementById("ordem_valores");
+    ordem.style.display = 'block';
+    let botao = document.getElementById("calcular")
+    botao.style.display = 'block'
+  } if (document.getElementById("tipo_tabela").value === "discreta") {
+    let up_input = document.getElementById("arquivo")
+    up_input.style.display = 'block'
+    let up_botao = document.getElementById("btn-upload-csv")
+    up_botao.style.display = 'block'
+    let label = document.getElementById("label_nome")
+    label.style.display = 'block'
+    let nome1 = document.getElementById("nome_variavel")
+    nome1.style.display = 'block'
+    let label_dados = document.getElementById("label_dados")
+    label_dados.style.display = 'block'
+    let dados = document.getElementById("dados_variavel")
+    dados.style.display = 'block'
+    let botao = document.getElementById("calcular")
+    botao.style.display = 'block'
+  } if (document.getElementById("tipo_tabela").value === "continua") {
+    let up_input = document.getElementById("arquivo")
+    up_input.style.display = 'block'
+    let up_botao = document.getElementById("btn-upload-csv")
+    up_botao.style.display = 'block'
+    let label = document.getElementById("label_nome")
+    label.style.display = 'block'
+    let nome1 = document.getElementById("nome_variavel")
+    nome1.style.display = 'block'
+    let label_dados = document.getElementById("label_dados")
+    label_dados.style.display = 'block'
+    let dados = document.getElementById("dados_variavel")
+    dados.style.display = 'block'
+    let botao = document.getElementById("calcular")
+    botao.style.display = 'block'
+  }
+}
+
+function calcular() {
+  if (document.getElementById("tipo_tabela").value === "nominal"){
+    criarTabelaNom();
+    let tipo_separatriz = document.getElementById("tipo_separatriz")
+    tipo_separatriz.style.display = 'block'
+    if (document.getElementById("tipo_separatriz").value === "quartil") {
+      let quartil = document.getElementById("quartil")
+      quartil.style.display = 'block'
+    } else if (document.getElementById("tipo_separatriz").value === "quintil"){
+      let quintil = document.getElementById("quintil")
+      quintil.style.display = 'block'
+    } else if (document.getElementById("tipo_separatriz").value === "decil"){
+      let decil = document.getElementById("decil")
+      decil.style.display = 'block'
+    } else if (document.getElementById("tipo_separatriz").value === "percentil"){
+      let percentil = document.getElementById("percentil")
+      percentil.style.display = 'block'
+    }
+  } if (document.getElementById("tipo_tabela").value === "ordinal") {
+    criarTabelaOrd();
+    let tipo_separatriz = document.getElementById("tipo_separatriz")
+    tipo_separatriz.style.display = 'block'
+    if (document.getElementById("tipo_separatriz").value === "quartil") {
+      let quartil = document.getElementById("quartil")
+      quartil.style.display = 'block'
+    } else if (document.getElementById("tipo_separatriz").value === "quintil"){
+      let quintil = document.getElementById("quintil")
+      quintil.style.display = 'block'
+    } else if (document.getElementById("tipo_separatriz").value === "decil"){
+      let decil = document.getElementById("decil")
+      decil.style.display = 'block'
+    } else if (document.getElementById("tipo_separatriz").value === "percentil"){
+      let percentil = document.getElementById("percentil")
+      percentil.style.display = 'block'
+    }
+  } if (document.getElementById("tipo_tabela").value === "discreta") {
+    criarTabelaDiscreta();
+    let tipo_separatriz = document.getElementById("tipo_separatriz")
+    tipo_separatriz.style.display = 'block'
+    if (document.getElementById("tipo_separatriz").value === "quartil") {
+      let quartil = document.getElementById("quartil")
+      quartil.style.display = 'block'
+    } else if (document.getElementById("tipo_separatriz").value === "quintil"){
+      let quintil = document.getElementById("quintil")
+      quintil.style.display = 'block'
+    } else if (document.getElementById("tipo_separatriz").value === "decil"){
+      let decil = document.getElementById("decil")
+      decil.style.display = 'block'
+    } else if (document.getElementById("tipo_separatriz").value === "quintil"){
+      let percentil = document.getElementById("percentil")
+      percentil.style.display = 'block'
+    }
+  } if (document.getElementById("tipo_tabela").value === "continua") {
+    criarTabelaContinua();
+    let tipo_separatriz = document.getElementById("tipo_separatriz")
+    tipo_separatriz.style.display = 'block'
+    if (document.getElementById("tipo_separatriz").value === "quartil") {
+      let quartil = document.getElementById("quartil")
+      quartil.style.display = 'block'
+    } else if (document.getElementById("tipo_separatriz").value === "quintil"){
+      let quintil = document.getElementById("quintil")
+      quintil.style.display = 'block'
+    } else if (document.getElementById("tipo_separatriz").value === "decil"){
+      let decil = document.getElementById("decil")
+      decil.style.display = 'block'
+    } else if (document.getElementById("tipo_separatriz").value === "quintil"){
+      let percentil = document.getElementById("percentil")
+      percentil.style.display = 'block'
+    }
+  }
+
+}
+
+
 function getRandomColor() {
   var letters = "0123456789ABCDEF".split("");
   var color = "#";
@@ -800,7 +942,7 @@ function tratamentoDeDadosOrdinal() {
   });
 
   if (dados_incorretos === true) {
-      alert('valores incorretos');
+      alert('Os valores digitados não estão nos dados!!!');
       return false;
   }
 
@@ -907,6 +1049,7 @@ function criarTabelaOrd() {
   let corpo = document.querySelector("tbody");
   let div_tabela_discreta = document.getElementById("div_tabela_discreta_nominal_ordinal");
   div_tabela_discreta.style.display = 'block';
+  
 
   array_valores = tratamentoDeDadosOrdinal();
 
@@ -1036,4 +1179,106 @@ function limparResultados()
 
   document.getElementById("container_grafico").innerHTML = '&nbsp;';
   document.getElementById("container_grafico").innerHTML = '<canvas id="myChart"></canvas>';
+}
+
+function quartilQualitativaNominal() {
+  let dados = (document.getElementById("dados_variavel").value.split(";"));
+  dados = quickSort(dados);
+  console.log(dados);
+  let posicao = document.getElementById("quartil_nominal").value;
+  console.log(posicao);
+  let calculo = Math.ceil(25 * dados.length * posicao / 100)
+  console.log(calculo);
+  let quartil = dados[calculo - 1]
+  console.log(quartil);
+}
+function quintilQualitativaNominal() {
+  let dados = (document.getElementById("dados_variavel").value.split(";"));
+  dados = quickSort(dados);
+  console.log(dados);
+  let posicao = document.getElementById("quintil_nominal").value;
+  console.log(posicao);
+  let calculo = Math.ceil(20 * dados.length * posicao / 100)
+  console.log(calculo);
+  let quintil = dados[calculo - 1]
+  console.log(quintil);
+}
+
+function decilQualitativaNominal() {
+  let dados = (document.getElementById("dados_variavel").value.split(";"));
+  dados = quickSort(dados);
+  console.log(dados);
+  let posicao = document.getElementById("decil_nominal").value;
+  console.log(posicao);
+  let calculo = Math.ceil(10 * dados.length * posicao / 100)
+  console.log(calculo);
+  let decil = dados[calculo - 1]
+  console.log(decil);
+}
+
+function percentilNominal () {
+  if (document.getElementById("tipo_separatriz").value === "percentil"){
+    let dados = (document.getElementById("dados_variavel").value.split(";"));
+    dados = quickSort(dados);
+    console.log(dados);
+    let posicao = document.getElementById("percentil_nominal").value;
+    console.log(posicao);
+    let calculo = Math.ceil(dados.length * posicao / 100)
+    console.log(calculo);
+    let percentil = dados[calculo - 1]
+    console.log(percentil);
+  }
+}
+
+function quartilDiscreta() {
+  let dados = (document.getElementById("dados_variavel").value.split(";"));
+  dados = quickSort(dados);
+  console.log(dados);
+  let posicao = document.getElementById("quartil").value;
+  console.log(posicao);
+  let calculo = Math.ceil(25 * dados.length * posicao / 100)
+  console.log(calculo);
+  let quartil = dados[calculo - 1]
+  console.log(quartil);
+}
+function quintilDiscreta() {
+  let dados = (document.getElementById("dados_variavel").value.split(";"));
+  dados = quickSort(dados);
+  console.log(dados);
+  let posicao = document.getElementById("quintil").value;
+  console.log(posicao);
+  let calculo = Math.ceil(20 * dados.length * posicao / 100)
+  console.log(calculo);
+  let quintil = dados[calculo - 1]
+  console.log(quintil);
+}
+
+function decilDiscreta() {
+  let dados = (document.getElementById("dados_variavel").value.split(";"));
+  dados = quickSort(dados);
+  console.log(dados);
+  let posicao = document.getElementById("decil").value;
+  console.log(posicao);
+  let calculo = Math.ceil(10 * dados.length * posicao / 100)
+  console.log(calculo);
+  let decil = dados[calculo - 1]
+  console.log(decil);
+}
+
+function percentilDiscreta() {
+  let dados = (document.getElementById("dados_variavel").value.split(";"));
+  dados = quickSort(dados);
+  console.log(dados);
+  let posicao = document.getElementById("percentil").value;
+  console.log(posicao);
+  let calculo = Math.ceil(dados.length * posicao / 100)
+  console.log(calculo);
+  let percentil = dados[calculo - 1]
+  console.log(percentil);
+}
+
+function quartilContinua () {
+  dados = tratamentoDeDadosContinua()
+  console.log(dados)
+
 }

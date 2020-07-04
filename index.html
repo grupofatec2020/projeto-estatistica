@@ -21,29 +21,30 @@
     <hr>
     <!-- nome_variavel é melhor até pra entender depois -->
     <!-- eu nao lembrava que podia usar _-->
-    <input type="file" name="upload-csv" id="arquivo">
-    <button id="btn-upload-csv" onclick="lerCSV()">Carregar CSV</button> <br>
-    <label for="nome_variavel">Nome da variável:</label>
-    <input type="text" id="nome_variavel" name="nome_variavel" placeholder="Digite a variavel, separando com ;"> 
     <br>
-    <label for="dados_variavel">Informe os valores:</label>
-    <input type="text" id="dados_variavel" size="200" name="dados_variavel" placeholder="Digite os dados da variavel, separando com ;">
-    <select name="tipo_desvio" id="tipo_desvio">
+    <p>Selecione o tipo de tabela desejada:</p>
+    <select id="tipo_tabela">
+        <option value="nominal">Qualitativa Nominal</option>
+        <option value="ordinal">Qualitativa Ordinal</option>
+        <option value="discreta">Quantitativa Discreta</option>
+        <option value="continua">Quantitativa Continua</option>
+    </select>
+    <button id="inserirDados" onclick="inserirDados()">Inserir Dados</button>
+    <input type="file" name="upload-csv" id="arquivo" style="display: none;">
+    <button id="btn-upload-csv" onclick="lerCSV()" style="display: none">Carregar CSV</button> <br>
+    <label for="nome_variavel" id="label_nome" style="display:none">Nome da variável:</label>
+    <input type="text" id="nome_variavel" name="nome_variavel" placeholder="Digite a variavel, separando com ;" style="display:none"> 
+    <br>
+    <label for="dados_variavel" id="label_dados" style="display:none">Informe os valores:</label>
+    <input type="text" id="dados_variavel" size="200" name="dados_variavel" placeholder="Digite os dados da variavel, separando com ;" style="display:none">
+    <select name="tipo_desvio" id="tipo_desvio" style="display:none">
         <option value="amostra">Amostra</option>
         <option value="populacao">População</option>
     </select>
     <br>
-    <label for="ordem_valores">Qual a ordem desejada:</label>
-    <input type="text" size="100" id="ordem_valores" name="ordem_valores" placeholder="Ordem dos valores"> 
-    <br>
-    <button id="tab_ord" onclick="criarTabelaOrd()">Qualitativa Ordinal</button>
-    <br>
-    <button id="tab_discreta" onclick="criarTabelaDiscreta()">Quantitativa Discreta</button>
-    <br>
-    <button id="tab_nom" onclick="criarTabelaNom()">Qualitativa Nominal</button>
-    <br>
-    <button id="tab_continua" onclick="criarTabelaContinua()">Criar Tabela Continua</button>
-
+    <label for="ordem_valores" id="nome_ordem" style="display:none">Qual a ordem desejada:</label>
+    <input type="text" size="100" id="ordem_valores" name="ordem_valores" placeholder="Ordem dos valores separados por ;" style="display:none"> 
+    <button id="calcular" onclick="calcular()" style="display: none">Calcular</button>
     <div>
         <br>
         <label id="nome_tabela"></label>
@@ -94,5 +95,17 @@
     <div style="top:60px; left:10px; width:500px; height:500px;" id="container_grafico">
         <canvas id="myChart"></canvas>
     </div>
+    <div>
+    <select name="tipo_separatriz" id="tipo_separatriz" style="display:none">
+        <option value="quartil">Quartil</option>
+        <option value="quintil">Quintil</option>
+        <option value="decil">Decil</option>
+        <option value="percentil">Percentil</option>
+    </select>
+    <input name="quaril" id="quartil" placeholder="Digite o valor desejado de 1 a 4" style="display:none" size="50">
+    <input name="quintil" id="quintil" placeholder="Digite o valor desejado de 1 a 5" style="display:none" size="50">
+    <input name="decil" id="decil" placeholder="Digite o valor desejado de 1 a 10" style="display:none" size="50">
+    <input name="percentil" id="percentil" placeholder="Digite o valor desejado de 1 a 100" style="display:none" size="50">
+</div>
 </body>
 </html>
